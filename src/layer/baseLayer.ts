@@ -46,15 +46,15 @@ export default class BaseLayer extends EventEmitter {
   }
 
   public destroy() {
-    this.layers.forEach((layer) => this.scene.removeLayer(layer));
+    this.layers.forEach(layer => this.scene.removeLayer(layer));
     this.layers.length = 0;
   }
 
   public show() {
-    this.layers.forEach((layer) => layer.show());
+    this.layers.forEach(layer => layer.show());
   }
   public hide() {
-    this.layers.forEach((layer) => layer.hide());
+    this.layers.forEach(layer => layer.hide());
   }
 
   public setOption(newOption: { [key: string]: any }) {
@@ -321,7 +321,7 @@ export default class BaseLayer extends EventEmitter {
         ? this.bubbleLayer
         : this.fillLayer;
     }
-    popupLayer.on(popup.openTriggerEvent as string, (e) => {
+    popupLayer.on(popup.openTriggerEvent as string, e => {
       const html = popup.Html
         ? popup.Html(e.feature.properties ? e.feature.properties : e.feature)
         : '';
@@ -334,7 +334,7 @@ export default class BaseLayer extends EventEmitter {
       this.scene.addPopup(this.popup);
     });
 
-    popupLayer.on(popup.closeTriggerEvent as string, (e) => {
+    popupLayer.on(popup.closeTriggerEvent as string, e => {
       if (this.popup) {
         this.popup.remove();
       }
