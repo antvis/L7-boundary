@@ -61,31 +61,52 @@ export default class DrillDownLayer {
     };
   }
   public addCountryEvent() {
-    const { drillDownTriggerEvent } = this.options;
+    const { drillDownTriggerEvent, drillDownEvent } = this.options;
     // 省级下钻到市
     this.provinceLayer.fillLayer.on(
       drillDownTriggerEvent as string,
       (e: any) => {
         this.provinceLayer.hide();
         this.drillDown(e.feature.properties.adcode);
+        drillDownEvent && drillDownEvent(e.feature.properties);
       },
     );
   }
 
   public addProvinceEvent() {
-    const { drillDownTriggerEvent, drillUpTriggerEvent } = this.options;
+    const {
+      drillDownTriggerEvent,
+      drillUpTriggerEvent,
+      drillUpEvent,
+      drillDownEvent,
+    } = this.options;
     this.cityLayer.fillLayer.on(drillUpTriggerEvent as string, () => {
+      const properties = this.getProperties(
+        this.provinceLayer.getFillData(),
+        this.cityLayer.getOptions().adcode,
+      );
       this.drillUp();
+      drillUpEvent && drillUpEvent(properties);
     });
     this.cityLayer.fillLayer.on(drillDownTriggerEvent as string, (e: any) => {
       this.drillDown(e.feature.properties.adcode);
+      drillDownEvent && drillDownEvent(e.feature.properties);
     });
   }
 
   public addCityEvent() {
-    const { drillDownTriggerEvent, drillUpTriggerEvent } = this.options;
+    const {
+      drillDownTriggerEvent,
+      drillUpTriggerEvent,
+      drillUpEvent,
+    } = this.options;
     this.countyLayer.fillLayer.on(drillUpTriggerEvent as string, () => {
+      const properties = this.getProperties(
+        this.cityLayer.getFillData(),
+        this.countyLayer.getOptions().adcode,
+      );
       this.drillUp();
+      drillUpEvent && drillUpEvent(properties);
     });
   }
 
@@ -200,5 +221,17 @@ export default class DrillDownLayer {
       geoDataLevel,
       ...this.options[type],
     };
+  }
+
+  private getProperties(data: any, adcode: adcodeType) {
+    const adcodeArray = Array.isArray(adcode) ? adcode : [adcode];
+    const feature = data.features.filter((fe: any) => {
+      const code = fe.properties.adcode;
+      return (
+        adcodeArray.indexOf(code) !== -1 ||
+        adcodeArray.indexOf('' + code) !== -1
+      );
+    });
+    return feature[0] ? feature[0].properties : {};
   }
 }
