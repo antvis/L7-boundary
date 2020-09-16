@@ -65,6 +65,10 @@ export default class BaseLayer extends EventEmitter {
     return this.fillData;
   }
 
+  public getOptions() {
+    return this.options;
+  }
+
   public updateData(
     newData?: Array<{ [key: string]: any }>,
     joinByField?: [string, string],

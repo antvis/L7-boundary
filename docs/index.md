@@ -149,6 +149,16 @@ District 提供 polygon 数据需要跟用户的属性数据，通过关系字�
 
 移除并销毁图层
 
-### demo
+### 案例
 
-<code src="./demo/china.jsx" />
+#### 世界地图
+
+<code src="./demo/world.jsx">
+
+#### 中国地图
+
+<code src="./demo/china.jsx">
+
+#### 钻取地图
+
+<code src="./demo/drilldown.jsx">

@@ -150,4 +150,6 @@ export interface IDrillDownOption {
   province: Partial<IDrawOption>;
   city: Partial<IDrawOption>;
   county: Partial<IDrawOption>;
+  drillUpEvent: (properties: any) => void;
+  drillDownEvent: (properties: any) => void;
 }
