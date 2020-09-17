@@ -33,7 +33,6 @@ script:
   - npm run prettier
   - npm run test
   - npm run build
-  - npm run deploy
 
 notifications:
    webhooks: ${dingdingWebhooks}
