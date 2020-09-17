@@ -51,6 +51,7 @@
     "@antv/l7": "^2.2.34"
   },
   "devDependencies": {
+    "@antv/l7": "^2.2.34",
     "@rollup/plugin-commonjs": "11.0.2",
     "@umijs/preset-react": "1.x",
     "@umijs/test": "^3.0.5",
