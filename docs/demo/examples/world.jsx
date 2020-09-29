@@ -11,7 +11,7 @@ export default () => {
         center: [116.2825, 39.9],
         pitch: 0,
         style: 'blank',
-        zoom: 3,
+        zoom: 1,
         minZoom: 0,
         maxZoom: 10,
       }),

@@ -1,5 +1,6 @@
 ---
 title: API
+order: 4
 ---
 
 地图行政区划组件，支持世界地图，中国地图省市县三级，支持中国地图省市县上钻下取。
@@ -151,14 +152,6 @@ District 提供 polygon 数据需要跟用户的属性数据，通过关系字�
 
 ### 案例
 
-#### 世界地图
-
-<code src="./demo/world.jsx">
-
 #### 中国地图
 
-<code src="./demo/china.jsx">
-
-#### 钻取地图
-
-<code src="./demo/drilldown.jsx">
+<code src="./demo/examples/china.jsx">

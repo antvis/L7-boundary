@@ -1,12 +1,12 @@
 import React from 'react';
 import { Scene } from '@antv/l7';
-import { DrillDownLayer } from '@antv/l7-district';
+import { CountyLayer } from '@antv/l7-district';
 import { Mapbox } from '@antv/l7-maps';
 
 export default () => {
   React.useEffect(() => {
     const scene = new Scene({
-      id: 'drilldown',
+      id: 'county',
       map: new Mapbox({
         center: [116.2825, 39.9],
         pitch: 0,
@@ -18,15 +18,8 @@ export default () => {
     });
 
     scene.on('loaded', () => {
-      new DrillDownLayer(scene, {
-        data: [
-          {
-            NAME_CHN: '云南省',
-            adcode: 530000,
-            value: 17881.12,
-          },
-        ],
-        drillDepth: 2,
+      new CountyLayer(scene, {
+        adcode: ['110101', '110102', '110106', '110105'], // 区县行政编码，可以加多个区县行政编码，展示多个区县
         fill: {
           color: {
             field: 'NAME_CHN',
@@ -40,24 +33,16 @@ export default () => {
             ],
           },
         },
-        city: {
-          fill: {
-            color: {
-              field: 'NAME_CHN',
-              values: ['#feedde'],
-            },
-          },
-        },
-        drillUpEvent: props => {
-          console.log('drillUpEvent', props);
-        },
-        drillDownEvent: props => {
-          console.log('drillDownEvent', props);
+        stroke: '#ccc',
+        label: {
+          enable: true,
+          textAllowOverlap: false,
+          field: 'NAME_CHN',
         },
         popup: {
           enable: true,
           Html: props => {
-            return `<span>${'hello ' + props.NAME_CHN}</span>`;
+            return `<span>${props.NAME_CHN}</span>`;
           },
         },
       });
@@ -70,7 +55,7 @@ export default () => {
         height: '400px',
         position: 'relative',
       }}
-      id="drilldown"
+      id="county"
     ></div>
   );
 };
