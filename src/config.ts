@@ -260,4 +260,5 @@ function setDataLevel(level: number) {
 }
 
 const DataConfig = DataLevelMap[DataLevel];
+
 export { setDataConfig, setDataLevel, getDataConfig, DataConfig };
