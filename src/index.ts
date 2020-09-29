@@ -15,3 +15,4 @@ export {
 };
 export * from './config';
 export * from './layer/interface';
+export * from './const';

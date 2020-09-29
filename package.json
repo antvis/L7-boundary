@@ -47,6 +47,7 @@
     "geobuf": "^3.0.1",
     "lodash": "^4.6.2",
     "pbf": "^3.2.1",
+    "react-dat-gui": "^4.0.3",
     "simplify-geojson": "^1.0.3"
   },
   "peerDependencies": {

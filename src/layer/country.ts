@@ -47,7 +47,7 @@ export default class CountryLayer extends BaseLayer {
       this.addMCLabel();
     }
   }
-  // 国界,省界
+  // 国界,省界 完整国界
   protected async addProvinceLine(cfg: any) {
     const lineData = await this.fetchData(cfg);
     const border1 = lineData.features.filter((feature: any) => {
@@ -80,26 +80,8 @@ export default class CountryLayer extends BaseLayer {
     this.addNationBorder(nationalFc, borderFc, borderFc2);
   }
 
-  // 国界,省界
-  // protected addFillLine(lineData: any) {
-  //   const border1 = lineData.features.filter((feature: any) => {
-  //     const type = feature.properties.type;
-  //     return type === '1' || type === '4';
-  //   });
-  //   const borderFc = {
-  //     type: 'FeatureCollection',
-  //     features: border1,
-  //   };
-  //   const nationalBorder = lineData.features.filter((feature: any) => {
-  //     const type = feature.properties.type;
-  //     return type !== '1' && type !== '4';
-  //   });
-  //   const nationalFc = {
-  //     type: 'FeatureCollection',
-  //     features: nationalBorder,
-  //   };
-  //   this.addNationBorder(nationalFc, borderFc);
-  // }
+  // 普通边界
+  protected async addNormalProvinceLine(cfg: any) {}
 
   private async loadData() {
     const { depth } = this.options;

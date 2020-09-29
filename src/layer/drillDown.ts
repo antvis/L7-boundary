@@ -141,7 +141,8 @@ export default class DrillDownLayer {
     this.countyLayer.show();
     let adcode = `${code}`;
     if (adcode.substr(2, 2) === '00') {
-      adcode = adcode.substr(0, 2) + '0100';
+      // 重庆包含两个编码
+      adcode = [adcode.substr(0, 2) + '0100', adcode.substr(0, 2) + '0200'];
     }
     // 更新县级行政区划
     this.countyLayer.updateDistrict(adcode, newData, joinByField);
