@@ -139,7 +139,7 @@ export default class DrillDownLayer {
     joinByField?: [string, string],
   ) {
     this.countyLayer.show();
-    let adcode = `${code}`;
+    let adcode: string | string[] = `${code}`;
     if (adcode.substr(2, 2) === '00') {
       // 重庆包含两个编码
       adcode = [adcode.substr(0, 2) + '0100', adcode.substr(0, 2) + '0200'];
