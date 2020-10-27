@@ -137,7 +137,8 @@ interface IDrawOption {
   fill: Partial<IFillOptions>;
 }
 export interface IDrillDownOption {
-  drillDepth: 0 | 1 | 2;
+  drillDepth: 0 | 0.5 | 1 | 2;
+  drillStart: 0 | 0.5 | 1 | 2;
   regionDrill: boolean;
   geoDataLevel: 1 | 2;
   customTrigger: boolean;
@@ -157,5 +158,5 @@ export interface IDrillDownOption {
   city: Partial<IDrawOption>;
   county: Partial<IDrawOption>;
   drillUpEvent: (properties: any) => void;
-  drillDownEvent: (properties: any) => void;
+  drillDownEvent: (properties: any, type: string) => void;
 }

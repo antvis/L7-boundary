@@ -28,6 +28,7 @@ export default () => {
             value: 17881.12,
           },
         ],
+        drillStart: 1,
         drillDepth: 2,
         provinceStroke: '#333',
         fill: {
@@ -36,13 +37,16 @@ export default () => {
             values: ['#eff3ff', '#bdd7e7', '#6baed6', '#3182bd', '#08519c'],
           },
         },
+
         province: {
           regionType: 'region',
           provinceStroke: 'rgba(255,255,255,0.1)',
+          adcode: [360000, 420000, 350000],
         },
         region: {
           strokeOpacity: 0.5,
           depth: 1,
+          adcode: [360000, 420000, 350000, 330000],
           fill: {
             color: {
               field: 'NAME_CHN',
@@ -60,6 +64,7 @@ export default () => {
           },
         },
         city: {
+          adcode: [360000, 420000, 350000, 330000],
           strokeOpacity: 0.5,
           fill: {
             color: {
