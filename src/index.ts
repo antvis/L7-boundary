@@ -5,6 +5,7 @@ import CountyLayer from './layer/county';
 import DrillDownLayer from './layer/drillDown';
 import ProvinceLayer from './layer/province';
 import WorldLayer from './layer/world';
+import RegionLayer from './layer/region';
 export {
   WorldLayer,
   CountryLayer,
@@ -12,7 +13,9 @@ export {
   CityLayer,
   CountyLayer,
   DrillDownLayer,
+  RegionLayer,
 };
 export * from './config';
 export * from './layer/interface';
 export * from './const';
+export * from './common';

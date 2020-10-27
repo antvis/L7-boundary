@@ -2,6 +2,7 @@ import { AttributeType, LineLayer, PointLayer, Scene } from '@antv/l7';
 import { getDataConfig } from '../config';
 import BaseLayer from './baseLayer';
 import { IDistrictLayerOption } from './interface';
+import { RegionList } from '../const';
 
 export default class CountryLayer extends BaseLayer {
   constructor(scene: Scene, option: Partial<IDistrictLayerOption> = {}) {
@@ -24,6 +25,7 @@ export default class CountryLayer extends BaseLayer {
   }
   protected async addProvinceFill() {
     const { depth } = this.options;
+    // 根据depth 获取数据
     const countryConfig = getDataConfig(this.options.geoDataLevel).country.CHN[
       depth
     ];
@@ -39,12 +41,16 @@ export default class CountryLayer extends BaseLayer {
       ? await this.fetchData(countryConfig.label)
       : null;
     if (fillLabel && this.options.label?.enable) {
-      this.addLabelLayer(
-        fillLabel.filter((v: any) => {
-          return v.name !== '澳门';
-        }),
-      );
-      this.addMCLabel();
+      if (this.options.regionType === 'province') {
+        this.addLabelLayer(
+          fillLabel.filter((v: any) => {
+            return v.name !== '澳门';
+          }),
+        );
+        this.addMCLabel();
+      } else {
+        this.addRegionLabel();
+      }
     }
   }
   // 国界,省界 完整国界
@@ -114,6 +120,7 @@ export default class CountryLayer extends BaseLayer {
       strokeWidth,
       visible,
       zIndex,
+      strokeOpacity,
     } = this.options;
     // 添加国界线
     const lineLayer = new LineLayer({
@@ -180,7 +187,12 @@ export default class CountryLayer extends BaseLayer {
   // 市边界
   private async addCityBorder(cfg: any) {
     const border1 = await this.fetchData(cfg);
-    const { cityStroke, cityStrokeWidth, visible } = this.options;
+    const {
+      cityStroke,
+      cityStrokeWidth,
+      visible,
+      strokeOpacity,
+    } = this.options;
     const cityline = new LineLayer({
       zIndex: 2,
       visible,
@@ -189,7 +201,7 @@ export default class CountryLayer extends BaseLayer {
       .color(cityStroke)
       .size(cityStrokeWidth)
       .style({
-        opacity: 0.5,
+        opacity: strokeOpacity,
       });
     this.scene.addLayer(cityline);
     this.layers.push(cityline);
@@ -198,7 +210,12 @@ export default class CountryLayer extends BaseLayer {
   // 县级边界
   private async addCountyBorder(cfg: any) {
     const border1 = await this.fetchData(cfg);
-    const { countyStrokeWidth, countyStroke, visible } = this.options;
+    const {
+      countyStrokeWidth,
+      countyStroke,
+      visible,
+      strokeOpacity,
+    } = this.options;
     const cityline = new LineLayer({
       zIndex: 2,
       visible,
@@ -207,7 +224,7 @@ export default class CountryLayer extends BaseLayer {
       .color(countyStroke)
       .size(countyStrokeWidth)
       .style({
-        opacity: 0.5,
+        opacity: strokeOpacity,
       });
     this.scene.addLayer(cityline);
     this.layers.push(cityline);
@@ -256,5 +273,11 @@ export default class CountryLayer extends BaseLayer {
         textOffset: offset,
       });
     return labelLayer;
+  }
+
+  private addRegionLabel() {
+    const data = Object.values(RegionList).map(v => v);
+    console.log('data', data);
+    this.addLabelLayer(data);
   }
 }

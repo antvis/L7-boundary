@@ -1,6 +1,7 @@
 import React from 'react';
 import { Scene } from '@antv/l7';
 import { DrillDownLayer } from '@antv/l7-district';
+import { RegionList, getRegionByAdcode } from '@antv/l7-district';
 import { Mapbox } from '@antv/l7-maps';
 
 export default () => {
@@ -19,6 +20,7 @@ export default () => {
 
     scene.on('loaded', () => {
       new DrillDownLayer(scene, {
+        regionDrill: true,
         data: [
           {
             NAME_CHN: '云南省',
@@ -27,24 +29,42 @@ export default () => {
           },
         ],
         drillDepth: 2,
+        provinceStroke: '#333',
         fill: {
           color: {
-            field: 'NAME_CHN',
-            values: [
-              '#feedde',
-              '#fdd0a2',
-              '#fdae6b',
-              '#fd8d3c',
-              '#e6550d',
-              '#a63603',
-            ],
+            field: 'REGION_NAME',
+            values: ['#eff3ff', '#bdd7e7', '#6baed6', '#3182bd', '#08519c'],
           },
         },
-        city: {
+        province: {
+          regionType: 'region',
+          provinceStroke: 'rgba(255,255,255,0.1)',
+        },
+        region: {
+          strokeOpacity: 0.5,
+          depth: 1,
           fill: {
             color: {
               field: 'NAME_CHN',
-              values: ['#feedde'],
+              values: ['#eff3ff', '#bdd7e7', '#6baed6', '#3182bd', '#08519c'],
+            },
+          },
+        },
+        county: {
+          strokeOpacity: 0.5,
+          fill: {
+            color: {
+              field: 'NAME_CHN',
+              values: ['#eff3ff', '#bdd7e7', '#6baed6', '#3182bd', '#08519c'],
+            },
+          },
+        },
+        city: {
+          strokeOpacity: 0.5,
+          fill: {
+            color: {
+              field: 'NAME_CHN',
+              values: ['#eff3ff', '#bdd7e7', '#6baed6', '#3182bd', '#08519c'],
             },
           },
         },
@@ -57,7 +77,7 @@ export default () => {
         popup: {
           enable: true,
           Html: props => {
-            return `<span>${'hello ' + props.NAME_CHN}</span>`;
+            return `<span>${'hello ' + props.REGION_NAME}</span>`;
           },
         },
       });

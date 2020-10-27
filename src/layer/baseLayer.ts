@@ -109,6 +109,7 @@ export default class BaseLayer extends EventEmitter {
       zIndex: 0,
       visible: true,
       geoDataLevel: 2,
+      regionType: 'province',
       depth: 1,
       adcode: [],
       joinBy: ['name', 'name'],
@@ -146,6 +147,7 @@ export default class BaseLayer extends EventEmitter {
       },
       autoFit: true,
       showBorder: true,
+      strokeOpacity: 1,
       stroke: '#bdbdbd',
       strokeVisible: true,
       strokeWidth: 0.6,
@@ -229,7 +231,13 @@ export default class BaseLayer extends EventEmitter {
   }
 
   protected addFillLine(provinceLine: any) {
-    const { stroke, strokeWidth, zIndex, visible } = this.options;
+    const {
+      stroke,
+      strokeWidth,
+      zIndex,
+      visible,
+      strokeOpacity,
+    } = this.options;
     const layer2 = new LineLayer({
       zIndex: zIndex + 0.1,
       visible,
@@ -238,7 +246,7 @@ export default class BaseLayer extends EventEmitter {
       .color(stroke)
       .size(strokeWidth)
       .style({
-        opacity: 1,
+        opacity: strokeOpacity,
       });
     this.scene.addLayer(layer2);
     this.layers.push(layer2);
@@ -246,6 +254,9 @@ export default class BaseLayer extends EventEmitter {
   }
 
   protected addLabelLayer(labelData: any, type: string = 'json') {
+    if (labelData.length === 0) {
+      return;
+    }
     const labelLayer = this.addLabel(labelData, type);
     this.scene.addLayer(labelLayer);
     this.layers.push(labelLayer);
