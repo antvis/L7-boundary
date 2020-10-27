@@ -53,7 +53,7 @@ export default class ProvinceLayer extends BaseLayer {
     if (showBorder) {
       this.lineLayer.setData(lineData);
     }
-    if (label.enable) {
+    if (label.enable && this.labelLayer) {
       this.labelLayer.setData(labelData);
     }
 

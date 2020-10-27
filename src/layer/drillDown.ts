@@ -40,7 +40,7 @@ export default class DrillDownLayer {
       this.regionLayer.on('loaded', () => {
         // 支持大区 或者省份下钻
         this.addRegionEvent();
-        this.regionLayer.hide();
+        // this.regionLayer.hide();
         this.layers.push(this.regionLayer);
       });
       this.cityLayer.on('loaded', () => {
@@ -87,6 +87,7 @@ export default class DrillDownLayer {
         if (this.options.regionDrill) {
           const REGION_CODE = e.feature.properties.REGION_CODE as string;
           adcode = RegionList[REGION_CODE].child; // 下钻到省级
+          console.log(adcode);
           this.drillState = 0.5;
         }
         // 下钻到省份

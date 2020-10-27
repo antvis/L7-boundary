@@ -254,9 +254,6 @@ export default class BaseLayer extends EventEmitter {
   }
 
   protected addLabelLayer(labelData: any, type: string = 'json') {
-    if (labelData.length === 0) {
-      return;
-    }
     const labelLayer = this.addLabel(labelData, type);
     this.scene.addLayer(labelLayer);
     this.layers.push(labelLayer);

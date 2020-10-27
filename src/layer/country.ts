@@ -41,16 +41,12 @@ export default class CountryLayer extends BaseLayer {
       ? await this.fetchData(countryConfig.label)
       : null;
     if (fillLabel && this.options.label?.enable) {
-      if (this.options.regionType === 'province') {
-        this.addLabelLayer(
-          fillLabel.filter((v: any) => {
-            return v.name !== '澳门';
-          }),
-        );
-        this.addMCLabel();
-      } else {
-        this.addRegionLabel();
-      }
+      this.addLabelLayer(
+        fillLabel.filter((v: any) => {
+          return v.name !== '澳门';
+        }),
+      );
+      this.addMCLabel();
     }
   }
   // 国界,省界 完整国界
@@ -277,7 +273,7 @@ export default class CountryLayer extends BaseLayer {
 
   private addRegionLabel() {
     const data = Object.values(RegionList).map(v => v);
-    console.log('data', data);
-    this.addLabelLayer(data);
+    // console.log('data', data);
+    // this.addLabelLayer(data);
   }
 }
