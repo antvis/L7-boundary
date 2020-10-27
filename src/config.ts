@@ -32,9 +32,10 @@ const dataLevel2: { [key: string]: any } = {
     CHN: {
       1: {
         fill: {
+          // 中国地图省份围栏数据
           type: 'pbf',
           url:
-            'https://gw.alipayobjects.com/os/bmw-prod/25228941-b2ac-4591-b07d-8261ac08d06f.bin',
+            'https://gw.alipayobjects.com/os/bmw-prod/71ac4de3-bb14-449d-a97d-2b98e25ec8df.bin',
         },
         line: {
           type: 'pbf',

@@ -104,6 +104,7 @@ export interface IDistrictLayerOption {
   adcode: adcodeType;
   simplifyTolerance: number | boolean;
   depth: 0 | 1 | 2 | 3;
+  regionType: 'province' | 'region';
   label: Partial<ILabelOption>;
   bubble: Partial<IBubbleOption>;
   fill: Partial<IFillOptions>;
@@ -111,6 +112,7 @@ export interface IDistrictLayerOption {
   autoFit: boolean;
   stroke: string;
   strokeVisible: boolean;
+  strokeOpacity: number;
   strokeWidth: number;
   provinceStroke: string;
   provinceStrokeVisible: boolean;
@@ -128,6 +130,7 @@ export interface IDistrictLayerOption {
   popup: Partial<IPopupOptions>;
 }
 interface IDrawOption {
+  depth: 0 | 1 | 2 | 3;
   joinBy: [string, string];
   label: Partial<ILabelOption>;
   bubble: Partial<IBubbleOption>;
@@ -135,11 +138,13 @@ interface IDrawOption {
 }
 export interface IDrillDownOption {
   drillDepth: 0 | 1 | 2;
+  regionDrill: boolean;
   geoDataLevel: 1 | 2;
   customTrigger: boolean;
   drillDownTriggerEvent: TriggeEventType;
   drillUpTriggerEvent: TriggeEventType & DrillUpTriggeEventType;
   provinceData?: Array<{ [key: string]: any }>;
+  regionData?: Array<{ [key: string]: any }>;
   cityData?: Array<{ [key: string]: any }>;
   countyData?: Array<{ [key: string]: any }>;
   joinBy: [string, string];
@@ -148,6 +153,7 @@ export interface IDrillDownOption {
   fill: Partial<IFillOptions>;
   popup: Partial<IPopupOptions>;
   province: Partial<IDrawOption>;
+  region: Partial<IDrawOption>;
   city: Partial<IDrawOption>;
   county: Partial<IDrawOption>;
   drillUpEvent: (properties: any) => void;
