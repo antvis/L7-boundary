@@ -25,7 +25,7 @@ export default class DrillDownLayer {
     this.scene = scene;
     // 默认初始化省地图
     const { drillStart = 0 } = this.options;
-    console.log(this.getLayerOption('city'));
+
     drillStart === 0 &&
       (this.provinceLayer = new CountryLayer(scene, {
         ...this.getLayerOption('province'),
@@ -42,7 +42,6 @@ export default class DrillDownLayer {
     drillStart <= 2 &&
       (this.countyLayer = new CityLayer(scene, this.getLayerOption('county')));
 
-    console.log(this.cityLayer);
     this.scene.setMapStatus({ doubleClickZoom: false });
     if (!this.options.customTrigger) {
       drillStart === 0 &&
@@ -75,6 +74,7 @@ export default class DrillDownLayer {
       drillDepth: 2,
       drillStart: 0,
       customTrigger: false,
+      autoUpdateData: true,
       regionDrill: false,
       drillDownTriggerEvent: 'click',
       drillUpTriggerEvent: 'undblclick',
@@ -133,7 +133,6 @@ export default class DrillDownLayer {
       drillUpEvent && drillUpEvent(properties);
     });
     this.regionLayer.fillLayer.on(drillDownTriggerEvent as string, (e: any) => {
-      console.log(e.feature.properties);
       this.drillState = 0;
       this.drillDown(e.feature.properties.adcode);
       drillDownEvent && drillDownEvent(e.feature.properties, 'province');
@@ -197,8 +196,10 @@ export default class DrillDownLayer {
     joinByField?: [string, string],
   ) {
     this.cityLayer.show();
-    this.cityLayer.updateDistrict(adcode, newData, joinByField);
-    this.cityLayer.fillLayer.fitBounds();
+    if (this.options.autoUpdateData) {
+      this.cityLayer.updateDistrict(adcode, newData, joinByField);
+      this.cityLayer.fillLayer.fitBounds();
+    }
     if (this.options.regionDrill) {
       this.regionLayer.hide();
     } else {
@@ -219,8 +220,10 @@ export default class DrillDownLayer {
       adcode = [adcode.substr(0, 2) + '0100', adcode.substr(0, 2) + '0200'];
     }
     // 更新县级行政区划
-    this.countyLayer.updateDistrict(adcode, newData, joinByField);
-    this.countyLayer.fillLayer.fitBounds();
+    if (this.options.autoUpdateData) {
+      this.countyLayer.updateDistrict(adcode, newData, joinByField);
+      this.countyLayer.fillLayer.fitBounds();
+    }
     this.cityLayer.hide();
     this.drillState = 2;
   }
@@ -232,8 +235,10 @@ export default class DrillDownLayer {
     joinByField?: [string, string],
   ) {
     this.regionLayer.show();
-    this.regionLayer.updateDistrict(adcode, newData, joinByField);
-    this.regionLayer.fillLayer.fitBounds();
+    if (this.options.autoUpdateData) {
+      this.regionLayer.updateDistrict(adcode, newData, joinByField);
+      this.regionLayer.fillLayer.fitBounds();
+    }
     this.countyLayer.hide();
     this.drillState = 0.5;
   }
@@ -304,20 +309,33 @@ export default class DrillDownLayer {
     switch (layer) {
       case 'province':
         this.provinceLayer.updateData(newData, joinByField);
+        this.provinceLayer.fillLayer.fitBounds();
         break;
       case 'region':
         this.regionLayer.updateData(newData, joinByField);
+        this.regionLayer.fillLayer.fitBounds();
         break;
       case 'city':
         this.cityLayer.updateData(newData, joinByField);
+        this.cityLayer.fillLayer.fitBounds();
         break;
       case 'county':
         this.countyLayer.updateData(newData, joinByField);
+        this.countyLayer.fillLayer.fitBounds();
     }
   }
 
   private getLayerOption(type: 'province' | 'city' | 'county' | 'region') {
-    const { joinBy, label, bubble, fill, popup, geoDataLevel } = this.options;
+    const {
+      joinBy,
+      label,
+      bubble,
+      fill,
+      popup,
+      geoDataLevel,
+      onClick,
+    } = this.options;
+
     const datatype = (type + 'Data') as
       | 'provinceData'
       | 'cityData'
@@ -330,6 +348,7 @@ export default class DrillDownLayer {
       bubble,
       fill,
       popup,
+      onClick,
       geoDataLevel,
       ...this.options[type],
     };

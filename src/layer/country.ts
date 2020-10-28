@@ -5,6 +5,7 @@ import { IDistrictLayerOption } from './interface';
 import { RegionList } from '../const';
 
 export default class CountryLayer extends BaseLayer {
+  protected layerType: string = 'country';
   constructor(scene: Scene, option: Partial<IDistrictLayerOption> = {}) {
     super(scene, option);
     const { depth, showBorder } = this.options;

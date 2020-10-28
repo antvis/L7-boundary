@@ -19,18 +19,22 @@ export default () => {
     });
 
     scene.on('loaded', () => {
-      new DrillDownLayer(scene, {
+      const drillLayer = new DrillDownLayer(scene, {
         regionDrill: true,
-        data: [
-          {
-            NAME_CHN: '云南省',
-            adcode: 530000,
-            value: 17881.12,
-          },
+        provinceData: [
+          { areaCode: '100', govTrans_avgTrdCnt30d: 6198254 },
+          { areaCode: '102', govTrans_avgTrdCnt30d: 1688510 },
+          { areaCode: '301', govTrans_avgTrdCnt30d: 4710502 },
+          { areaCode: '', govTrans_avgTrdCnt30d: 8412 },
+          { areaCode: '3', govTrans_avgTrdCnt30d: 2017222 },
+          { areaCode: '101', govTrans_avgTrdCnt30d: 3660468 },
+          { areaCode: '103', govTrans_avgTrdCnt30d: 1748562 },
+          { areaCode: '104', govTrans_avgTrdCnt30d: 6425560 },
         ],
-        drillStart: 1,
+        drillStart: 0,
         drillDepth: 2,
         provinceStroke: '#333',
+        drillDownTriggerEvent: 'dblclick',
         fill: {
           color: {
             field: 'REGION_NAME',
@@ -39,14 +43,14 @@ export default () => {
         },
 
         province: {
+          joinBy: ['REGION_CODE', 'areaCode'],
           regionType: 'region',
           provinceStroke: 'rgba(255,255,255,0.1)',
-          adcode: [360000, 420000, 350000],
         },
         region: {
+          joinBy: ['adcode', 'areaCode'],
           strokeOpacity: 0.5,
           depth: 1,
-          adcode: [360000, 420000, 350000, 330000],
           fill: {
             color: {
               field: 'NAME_CHN',
@@ -64,7 +68,7 @@ export default () => {
           },
         },
         city: {
-          adcode: [360000, 420000, 350000, 330000],
+          adcode: [],
           strokeOpacity: 0.5,
           fill: {
             color: {
@@ -73,16 +77,19 @@ export default () => {
             },
           },
         },
+        onClick: (e, layerType) => {
+          console.log('click', e, layerType);
+        },
         drillUpEvent: props => {
           console.log('drillUpEvent', props);
         },
-        drillDownEvent: props => {
-          console.log('drillDownEvent', props);
+        drillDownEvent: (props, type) => {
+          console.log(type);
         },
         popup: {
           enable: true,
           Html: props => {
-            return `<span>${'hello ' + props.REGION_NAME}</span>`;
+            return `<span>${props.REGION_NAME}:${props.govTrans_avgTrdCnt30d}</span>`;
           },
         },
       });

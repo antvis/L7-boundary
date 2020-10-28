@@ -20,8 +20,10 @@ export default class RegionLayer extends BaseLayer {
   private fillRawData: any;
   private lineRawData: any;
   private labelRawData: any;
+  protected layerType: string = 'region';
   constructor(scene: Scene, option: Partial<IProvinceLayerOption> = {}) {
     super(scene, option);
+    this.layerType = 'region';
     this.addRegionFillLayer();
     // this.addProvinceLineLayer();
   }

@@ -8,6 +8,7 @@ export interface IProvinceLayerOption extends IDistrictLayerOption {
   adcode: adcodeType;
 }
 export default class CityLayer extends ProvinceLayer {
+  protected layerType: string = 'county';
   protected getDefaultOption(): IProvinceLayerOption {
     const config = super.getDefaultOption();
     return merge({}, config, {

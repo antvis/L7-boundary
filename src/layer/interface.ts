@@ -128,6 +128,7 @@ export interface IDistrictLayerOption {
   chinaNationalStroke: string;
   chinaNationalWidth: number;
   popup: Partial<IPopupOptions>;
+  onClick?: (properties: any, type: string) => void;
 }
 interface IDrawOption {
   depth: 0 | 1 | 2 | 3;
@@ -139,6 +140,7 @@ interface IDrawOption {
 export interface IDrillDownOption {
   drillDepth: 0 | 0.5 | 1 | 2;
   drillStart: 0 | 0.5 | 1 | 2;
+  autoUpdateData: boolean;
   regionDrill: boolean;
   geoDataLevel: 1 | 2;
   customTrigger: boolean;
@@ -157,6 +159,7 @@ export interface IDrillDownOption {
   region: Partial<IDrawOption>;
   city: Partial<IDrawOption>;
   county: Partial<IDrawOption>;
+  onClick?: (properties: any, type: string) => void;
   drillUpEvent: (properties: any) => void;
   drillDownEvent: (properties: any, type: string) => void;
 }
