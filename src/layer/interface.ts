@@ -161,5 +161,9 @@ export interface IDrillDownOption {
   county: Partial<IDrawOption>;
   onClick?: (properties: any, type: string) => void;
   drillUpEvent: (properties: any) => void;
-  drillDownEvent: (properties: any, type: string) => void;
+  drillDownEvent: (
+    properties: any,
+    type: string,
+    adcode: string | string[],
+  ) => void;
 }

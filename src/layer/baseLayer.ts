@@ -218,7 +218,9 @@ export default class BaseLayer extends EventEmitter {
     this.scene.addLayer(fillLayer);
     if (this.options.onClick) {
       this.fillLayer.on('click', e => {
-        this.options.onClick(e, this.layerType);
+        this.options &&
+          this.options.onClick &&
+          this.options.onClick(e, this.layerType);
       });
     }
     if (this.options.bubble && this.options.bubble?.enable !== false) {
