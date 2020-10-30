@@ -3,6 +3,7 @@ import {
   ScaleTypeName,
   StyleAttributeField,
   StyleAttributeOption,
+  TYPES,
 } from '@antv/l7';
 export type anchorType =
   | 'right'
@@ -138,6 +139,8 @@ interface IDrawOption {
   fill: Partial<IFillOptions>;
 }
 export interface IDrillDownOption {
+  viewStart: DRILL_LEVEL;
+  viewEnd: DRILL_LEVEL;
   drillDepth: 0 | 0.5 | 1 | 2;
   drillStart: 0 | 0.5 | 1 | 2;
   autoUpdateData: boolean;
@@ -159,6 +162,7 @@ export interface IDrillDownOption {
   region: Partial<IDrawOption>;
   city: Partial<IDrawOption>;
   county: Partial<IDrawOption>;
+  [key: string]: any;
   onClick?: (properties: any, type: string) => void;
   drillUpEvent: (properties: any) => void;
   drillDownEvent: (
@@ -167,3 +171,5 @@ export interface IDrillDownOption {
     adcode: string | string[],
   ) => void;
 }
+
+export type DRILL_LEVEL = 'Country' | 'Region' | 'Province' | 'City' | 'County';

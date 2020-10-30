@@ -4,6 +4,13 @@ export interface IRegion {
   name: string;
   center?: [number, number];
 }
+export const DRILL_TYPE_LIST = [
+  'Country',
+  'Region',
+  'Province',
+  'City',
+  'County',
+];
 export const RegionList: { [key: string]: IRegion } = {
   '100': {
     name: '华北区',

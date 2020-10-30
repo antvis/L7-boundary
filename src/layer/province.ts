@@ -82,6 +82,7 @@ export default class ProvinceLayer extends BaseLayer {
   protected filterData(data: any, adcode: adcodeType) {
     const adcodeArray = Array.isArray(adcode) ? adcode : [adcode];
     const features = data.features.filter((fe: any) => {
+      // 根据Code过滤数据
       const code = fe.properties.adcode_pro;
       return (
         adcodeArray.indexOf(code) !== -1 ||

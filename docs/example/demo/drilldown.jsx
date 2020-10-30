@@ -21,6 +21,8 @@ export default () => {
     scene.on('loaded', () => {
       const drillLayer = new DrillDownLayer(scene, {
         regionDrill: true,
+        viewStart: 'Country',
+        viewEnd: 'County',
         provinceData: [
           { areaCode: '100', govTrans_avgTrdCnt30d: 6198254 },
           { areaCode: '102', govTrans_avgTrdCnt30d: 1688510 },
@@ -31,8 +33,7 @@ export default () => {
           { areaCode: '103', govTrans_avgTrdCnt30d: 1748562 },
           { areaCode: '104', govTrans_avgTrdCnt30d: 6425560 },
         ],
-        drillStart: 0,
-        drillDepth: 2,
+
         provinceStroke: '#333',
         drillDownTriggerEvent: 'dblclick',
         fill: {
@@ -43,11 +44,13 @@ export default () => {
         },
 
         province: {
+          adcode: ['100', '101'],
           joinBy: ['REGION_CODE', 'areaCode'],
           regionType: 'region',
           provinceStroke: 'rgba(255,255,255,0.1)',
         },
         region: {
+          adcode: ['410000'],
           joinBy: ['adcode', 'areaCode'],
           strokeOpacity: 0.5,
           depth: 1,
@@ -68,7 +71,7 @@ export default () => {
           },
         },
         city: {
-          adcode: [],
+          // adcode: [330000],
           strokeOpacity: 0.5,
           fill: {
             color: {
@@ -84,7 +87,7 @@ export default () => {
           console.log('drillUpEvent', props);
         },
         drillDownEvent: (props, type) => {
-          console.log(type);
+          console.log(type, props);
         },
         popup: {
           enable: true,
@@ -93,6 +96,7 @@ export default () => {
           },
         },
       });
+      console.log(drillLayer);
     });
   }, []);
 
