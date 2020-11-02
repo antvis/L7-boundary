@@ -259,12 +259,15 @@ export default class CountryLayer extends BaseLayer {
       // 根据Code过滤数据
       const { REGION_CODE, adcode_pro } = fe.properties;
       return (
+        adcodeArray.indexOf('86') !== -1 ||
+        adcodeArray.indexOf(86) !== -1 ||
         adcodeArray.indexOf(REGION_CODE) !== -1 ||
         adcodeArray.indexOf('' + REGION_CODE) !== -1 ||
         adcodeArray.indexOf(adcode_pro) !== -1 ||
         adcodeArray.indexOf('' + adcode_pro) !== -1
       );
     });
+    console.log(adcodeArray, features);
     return { type: 'FeatureCollection', features };
   }
 

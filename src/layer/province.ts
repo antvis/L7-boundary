@@ -83,10 +83,12 @@ export default class ProvinceLayer extends BaseLayer {
     const adcodeArray = Array.isArray(adcode) ? adcode : [adcode];
     const features = data.features.filter((fe: any) => {
       // 根据Code过滤数据
-      const code = fe.properties.adcode_pro;
+      const { adcode_pro, adcode } = fe.properties;
       return (
-        adcodeArray.indexOf(code) !== -1 ||
-        adcodeArray.indexOf('' + code) !== -1
+        adcodeArray.indexOf(adcode_pro) !== -1 ||
+        adcodeArray.indexOf(adcode) !== -1 ||
+        adcodeArray.indexOf('' + adcode_pro) !== -1 ||
+        adcodeArray.indexOf('' + adcode) !== -1
       );
     });
     return { type: 'FeatureCollection', features };
@@ -95,10 +97,13 @@ export default class ProvinceLayer extends BaseLayer {
   protected filterLabelData(data: any, adcode: adcodeType) {
     const adcodeArray = Array.isArray(adcode) ? adcode : [adcode];
     const features = data.filter((fe: any) => {
-      const code = fe.adcode_pro;
+      const { adcode_pro, adcode } = fe;
+
       return (
-        adcodeArray.indexOf(code) !== -1 ||
-        adcodeArray.indexOf('' + code) !== -1
+        adcodeArray.indexOf(adcode_pro) !== -1 ||
+        adcodeArray.indexOf(adcode) !== -1 ||
+        adcodeArray.indexOf('' + adcode_pro) !== -1 ||
+        adcodeArray.indexOf('' + adcode) !== -1
       );
     });
     return features;
