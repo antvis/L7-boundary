@@ -19,7 +19,7 @@ export default class ProvinceLayer extends BaseLayer {
   private fillRawData: any;
   private lineRawData: any;
   private labelRawData: any;
-  protected layerType: string = 'province';
+  protected layerType: string = 'Province';
   constructor(scene: Scene, option: Partial<IProvinceLayerOption> = {}) {
     super(scene, option);
     this.addProvinceFillLayer();

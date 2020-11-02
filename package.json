@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-district",
-  "version": "2.2.40-beta.5",
+  "version": "2.2.40-beta.6",
   "scripts": {
     "start": "dumi dev",
     "docs:build": "dumi build",
@@ -20,7 +20,7 @@
   ],
   "main": "lib/index.js",
   "module": "es/index.js",
-  "typings": "dist/index.d.ts",
+  "typings": "es/index.d.ts",
   "unpkg": "dist/l7-district.js",
   "gitHooks": {
     "pre-commit": "lint-staged"

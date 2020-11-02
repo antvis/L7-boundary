@@ -3,6 +3,7 @@ import { Scene, PointLayer } from '@antv/l7';
 import mergeWith from 'lodash/mergeWith';
 import CityLayer from './city';
 import CountryLayer from './country';
+import RegionLayer from './region';
 import { adcodeType, IDrillDownOption, DRILL_LEVEL } from './interface';
 import ProvinceLayer from './province';
 import { RegionList, DRILL_TYPE_LIST } from '../const';
@@ -13,13 +14,13 @@ function mergeCustomizer(objValue: any, srcValue: any) {
 }
 
 export default class DrillDownLayer {
+  public drillState: DRILL_LEVEL;
   private options: Partial<IDrillDownOption>;
   private regionLayer: ProvinceLayer;
   private cityLayer: ProvinceLayer;
   private countyLayer: CityLayer;
   private provinceLayer: CountryLayer;
   private scene: Scene;
-  private drillState: DRILL_LEVEL;
   private layers: any = [];
   private drillList: Array<DRILL_LEVEL>;
   constructor(scene: Scene, option: Partial<IDrillDownOption>) {
@@ -138,7 +139,7 @@ export default class DrillDownLayer {
       //   this.provinceLayer.getFillData(),
       //   this.cityLayer.getOptions().adcode,
       // );
-      this.drillState = 'City';
+      this.drillState = 'Province';
       const next = this.options.regionDrill ? 'Region' : 'Country';
       this.drillUp(next as DRILL_LEVEL);
       if (this.drillList.indexOf(next) !== -1)
@@ -150,15 +151,15 @@ export default class DrillDownLayer {
     });
 
     this.cityLayer.fillLayer.on(drillDownTriggerEvent as string, (e: any) => {
-      this.drillState = 'County';
+      this.drillState = 'City';
       if (this.options.autoUpdateData) {
         this.drillDown(e.feature.properties.adcode);
       }
-      if (this.drillList.indexOf('County')) {
+      if (this.drillList.indexOf('City') !== -1) {
         drillDownEvent &&
           drillDownEvent(
             e.feature.properties,
-            'County',
+            'City',
             e.feature.properties.adcode,
           );
       }
@@ -292,14 +293,14 @@ export default class DrillDownLayer {
       case 'Region':
         this.showRegionView(adcode, newData, joinByField); // 省
         break;
-      case 'County':
+      case 'City':
         this.showCityView(adcode, newData, joinByField); // 区县
         break;
     }
   }
 
   public updateData(
-    layer: 'Province' | 'city' | 'county' | 'region',
+    layer: DRILL_LEVEL,
     newData: Array<{ [key: string]: any }>,
     joinByField?: [string, string],
   ) {
@@ -307,13 +308,13 @@ export default class DrillDownLayer {
       case 'Province':
         this.provinceLayer.updateData(newData, joinByField);
         break;
-      case 'region':
+      case 'Region':
         this.regionLayer.updateData(newData, joinByField);
         break;
-      case 'city':
+      case 'City':
         this.cityLayer.updateData(newData, joinByField);
         break;
-      case 'county':
+      case 'County':
         this.countyLayer.updateData(newData, joinByField);
     }
   }
@@ -354,7 +355,7 @@ export default class DrillDownLayer {
         ...this.getLayerOption('Province'),
       }));
     viewList.indexOf('Region') !== -1 &&
-      (this.regionLayer = new ProvinceLayer(
+      (this.regionLayer = new RegionLayer(
         scene,
         this.getLayerOption('Region'),
       ));
@@ -384,16 +385,16 @@ export default class DrillDownLayer {
           if (this.options.viewStart !== 'Region') this.regionLayer.hide();
           this.layers.push(this.regionLayer);
         });
-      viewList.indexOf('City') !== -1 &&
+      viewList.indexOf('Province') !== -1 &&
         this.cityLayer.on('loaded', () => {
           this.addProvinceEvent();
-          if (this.options.viewStart !== 'City') this.cityLayer.hide();
+          if (this.options.viewStart !== 'Province') this.cityLayer.hide();
           this.layers.push(this.cityLayer);
         });
-      viewList.indexOf('County') !== -1 &&
+      viewList.indexOf('City') !== -1 &&
         this.countyLayer.on('loaded', () => {
           this.addCityEvent();
-          if (this.options.viewStart !== 'County') this.countyLayer.hide();
+          if (this.options.viewStart !== 'City') this.countyLayer.hide();
           this.layers.push(this.countyLayer);
         });
     }
