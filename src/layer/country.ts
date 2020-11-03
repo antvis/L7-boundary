@@ -267,7 +267,6 @@ export default class CountryLayer extends BaseLayer {
         adcodeArray.indexOf('' + adcode_pro) !== -1
       );
     });
-    console.log(adcodeArray, features);
     return { type: 'FeatureCollection', features };
   }
 
