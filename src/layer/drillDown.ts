@@ -16,7 +16,7 @@ function mergeCustomizer(objValue: any, srcValue: any) {
 export default class DrillDownLayer {
   public drillState: DRILL_LEVEL;
   private options: Partial<IDrillDownOption>;
-  private regionLayer: ProvinceLayer;
+  private regionLayer: RegionLayer;
   private cityLayer: ProvinceLayer;
   private countyLayer: CityLayer;
   private provinceLayer: CountryLayer;
@@ -305,16 +305,16 @@ export default class DrillDownLayer {
     joinByField?: [string, string],
   ) {
     switch (layer) {
-      case 'Province':
+      case 'Country':
         this.provinceLayer.updateData(newData, joinByField);
         break;
       case 'Region':
         this.regionLayer.updateData(newData, joinByField);
         break;
-      case 'City':
+      case 'Province':
         this.cityLayer.updateData(newData, joinByField);
         break;
-      case 'County':
+      case 'City':
         this.countyLayer.updateData(newData, joinByField);
     }
   }
