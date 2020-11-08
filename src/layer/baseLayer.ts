@@ -36,6 +36,7 @@ export default class BaseLayer extends EventEmitter {
   protected options: IDistrictLayerOption;
   protected layers: ILayer[] = [];
   protected fillData: any;
+  protected layerType: string;
   private popup: IPopup;
 
   constructor(scene: Scene, option: Partial<IDistrictLayerOption> = {}) {
@@ -211,9 +212,17 @@ export default class BaseLayer extends EventEmitter {
         color: fill.activeColor as string,
       });
     }
+
     this.fillLayer = fillLayer;
     this.layers.push(fillLayer);
     this.scene.addLayer(fillLayer);
+    if (this.options.onClick) {
+      this.fillLayer.on('click', e => {
+        this.options &&
+          this.options.onClick &&
+          this.options.onClick(e, this.layerType);
+      });
+    }
     if (this.options.bubble && this.options.bubble?.enable !== false) {
       const labeldata = fillCountry.features.map((feature: any) => {
         return {
@@ -254,9 +263,6 @@ export default class BaseLayer extends EventEmitter {
   }
 
   protected addLabelLayer(labelData: any, type: string = 'json') {
-    if (labelData.length === 0) {
-      return;
-    }
     const labelLayer = this.addLabel(labelData, type);
     this.scene.addLayer(labelLayer);
     this.layers.push(labelLayer);

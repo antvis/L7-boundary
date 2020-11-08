@@ -1,13 +1,13 @@
 {
   "name": "@antv/l7-district",
-  "version": "2.2.39",
+  "version": "2.2.40-beta.11",
   "scripts": {
     "start": "dumi dev",
     "docs:build": "dumi build",
     "docs:deploy": "gh-pages -d docs-dist",
     "build": "father-build",
     "deploy": "npm run docs:build && npm run docs:deploy",
-    "release": "npm run build && npm publish",
+    "release": "npm run build && npm publish --tag beta",
     "prettier": "prettier --write \"**/*.{js,jsx,tsx,ts,less,md,json}\"",
     "test": "umi-test",
     "test:coverage": "umi-test --coverage"
@@ -20,7 +20,7 @@
   ],
   "main": "lib/index.js",
   "module": "es/index.js",
-  "typings": "dist/index.d.ts",
+  "typings": "es/index.d.ts",
   "unpkg": "dist/l7-district.js",
   "gitHooks": {
     "pre-commit": "lint-staged"

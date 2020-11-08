@@ -1,10 +1,12 @@
 import { AttributeType, LineLayer, PointLayer, Scene } from '@antv/l7';
 import { getDataConfig } from '../config';
 import BaseLayer from './baseLayer';
-import { IDistrictLayerOption } from './interface';
+import { IDistrictLayerOption, adcodeType } from './interface';
 import { RegionList } from '../const';
 
 export default class CountryLayer extends BaseLayer {
+  protected layerType: string = 'Country';
+  private fillRawData: any;
   constructor(scene: Scene, option: Partial<IDistrictLayerOption> = {}) {
     super(scene, option);
     const { depth, showBorder } = this.options;
@@ -24,13 +26,19 @@ export default class CountryLayer extends BaseLayer {
     }
   }
   protected async addProvinceFill() {
-    const { depth } = this.options;
+    const { depth, adcode } = this.options;
     // 根据depth 获取数据
     const countryConfig = getDataConfig(this.options.geoDataLevel).country.CHN[
       depth
     ];
     const fillData = await this.fetchData(countryConfig.fill);
-    this.addFillLayer(fillData);
+    this.fillRawData = fillData;
+    let data = fillData;
+    if (adcode && Array.isArray(adcode) && adcode.length !== 0) {
+      data = this.filterData(fillData, adcode);
+    }
+    this.fillData = data;
+    this.addFillLayer(data);
   }
   protected async addProvinceLabel() {
     const { depth } = this.options;
@@ -41,16 +49,12 @@ export default class CountryLayer extends BaseLayer {
       ? await this.fetchData(countryConfig.label)
       : null;
     if (fillLabel && this.options.label?.enable) {
-      if (this.options.regionType === 'province') {
-        this.addLabelLayer(
-          fillLabel.filter((v: any) => {
-            return v.name !== '澳门';
-          }),
-        );
-        this.addMCLabel();
-      } else {
-        this.addRegionLabel();
-      }
+      this.addLabelLayer(
+        fillLabel.filter((v: any) => {
+          return v.name !== '澳门';
+        }),
+      );
+      this.addMCLabel();
     }
   }
   // 国界,省界 完整国界
@@ -249,6 +253,23 @@ export default class CountryLayer extends BaseLayer {
     this.layers.push(labelLayer, labelLayer1, labelLayer2);
   }
 
+  private filterData(data: any, adcode: adcodeType) {
+    const adcodeArray = Array.isArray(adcode) ? adcode : [adcode];
+    const features = data.features.filter((fe: any) => {
+      // 根据Code过滤数据
+      const { REGION_CODE, adcode_pro } = fe.properties;
+      return (
+        adcodeArray.indexOf('86') !== -1 ||
+        adcodeArray.indexOf(86) !== -1 ||
+        adcodeArray.indexOf(REGION_CODE) !== -1 ||
+        adcodeArray.indexOf('' + REGION_CODE) !== -1 ||
+        adcodeArray.indexOf(adcode_pro) !== -1 ||
+        adcodeArray.indexOf('' + adcode_pro) !== -1
+      );
+    });
+    return { type: 'FeatureCollection', features };
+  }
+
   private addText(labelData: any, option: any, offset: [number, number]) {
     const { label, zIndex, visible } = this.options;
     const labelLayer = new PointLayer({
@@ -277,7 +298,7 @@ export default class CountryLayer extends BaseLayer {
 
   private addRegionLabel() {
     const data = Object.values(RegionList).map(v => v);
-    console.log('data', data);
-    this.addLabelLayer(data);
+    // console.log('data', data);
+    // this.addLabelLayer(data);
   }
 }

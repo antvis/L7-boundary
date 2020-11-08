@@ -3,64 +3,48 @@ import { Scene, PointLayer } from '@antv/l7';
 import mergeWith from 'lodash/mergeWith';
 import CityLayer from './city';
 import CountryLayer from './country';
-import { adcodeType, IDrillDownOption } from './interface';
+import RegionLayer from './region';
+import { adcodeType, IDrillDownOption, DRILL_LEVEL } from './interface';
 import ProvinceLayer from './province';
-import { RegionList } from '../const';
+import { RegionList, DRILL_TYPE_LIST } from '../const';
 function mergeCustomizer(objValue: any, srcValue: any) {
   if (Array.isArray(srcValue)) {
     return srcValue;
   }
 }
+
 export default class DrillDownLayer {
+  public drillState: DRILL_LEVEL;
   private options: Partial<IDrillDownOption>;
-  private regionLayer: ProvinceLayer;
+  private regionLayer: RegionLayer;
   private cityLayer: ProvinceLayer;
   private countyLayer: CityLayer;
   private provinceLayer: CountryLayer;
   private scene: Scene;
-  private drillState: 0 | 0.5 | 1 | 2 = 0;
   private layers: any = [];
+  private drillList: Array<DRILL_LEVEL>;
   constructor(scene: Scene, option: Partial<IDrillDownOption>) {
     this.options = mergeWith(this.getDefaultOption(), option, mergeCustomizer);
+    this.drillState = this.options.viewStart as DRILL_LEVEL;
     this.scene = scene;
-    // 默认初始化省地图
-    this.provinceLayer = new CountryLayer(scene, {
-      ...this.getLayerOption('province'),
-    });
-    this.cityLayer = new ProvinceLayer(scene, this.getLayerOption('city'));
-    this.regionLayer = new ProvinceLayer(scene, this.getLayerOption('region'));
-    this.countyLayer = new CityLayer(scene, this.getLayerOption('county'));
+    this.drillList = this.getViewList();
+    // 初始化各层级图层；
+    this.initLayers(scene);
+    this.initLayerEvent();
     this.scene.setMapStatus({ doubleClickZoom: false });
-    if (!this.options.customTrigger) {
-      this.provinceLayer.on('loaded', () => {
-        // 支持大区 或者省份下钻
-        this.addCountryEvent();
-        this.layers.push(this.provinceLayer);
-      });
-      this.regionLayer.on('loaded', () => {
-        // 支持大区 或者省份下钻
-        this.addRegionEvent();
-        this.regionLayer.hide();
-        this.layers.push(this.regionLayer);
-      });
-      this.cityLayer.on('loaded', () => {
-        this.addProvinceEvent();
-        this.layers.push(this.cityLayer);
-      });
-      this.countyLayer.on('loaded', () => {
-        this.addCityEvent();
-        this.layers.push(this.countyLayer);
-      });
-    }
   }
   public getDefaultOption() {
     return {
       drillDepth: 2,
+      drillStart: 1,
       customTrigger: false,
+      autoUpdateData: true,
       regionDrill: false,
       drillDownTriggerEvent: 'click',
       drillUpTriggerEvent: 'undblclick',
       provinceData: [],
+      viewStart: 'Country',
+      viewEnd: 'County',
       cityData: [],
       countyData: [],
       city: {
@@ -84,15 +68,22 @@ export default class DrillDownLayer {
       drillDownTriggerEvent as string,
       (e: any) => {
         let adcode = e.feature.properties.adcode;
+        let type: DRILL_LEVEL = 'Province';
         if (this.options.regionDrill) {
           const REGION_CODE = e.feature.properties.REGION_CODE as string;
           adcode = RegionList[REGION_CODE].child; // 下钻到省级
-          this.drillState = 0.5;
+          this.drillState = 'Region';
+          type = 'Region';
         }
         // 下钻到省份
-        this.provinceLayer.hide();
-        this.drillDown(adcode);
-        drillDownEvent && drillDownEvent(e.feature.properties);
+        if (this.options.autoUpdateData) {
+          this.drillDown(adcode);
+        }
+        // 下钻事件
+        if (this.drillList.indexOf(type) !== -1) {
+          this.provinceLayer.hide();
+          drillDownEvent && drillDownEvent(e.feature.properties, type, adcode);
+        }
       },
     );
   }
@@ -105,16 +96,33 @@ export default class DrillDownLayer {
       drillDownEvent,
     } = this.options;
     this.regionLayer.fillLayer.on(drillUpTriggerEvent as string, e => {
-      const properties = this.getProperties(
-        this.regionLayer.getFillData(),
-        this.regionLayer.getOptions().adcode,
-      );
-      this.drillUp();
-      drillUpEvent && drillUpEvent(properties);
+      // const properties = this.getProperties(
+      //   this.regionLayer.getFillData(),
+      //   this.regionLayer.getOptions().adcode,
+      // );
+      this.drillUp('Country');
+      if (this.drillList.indexOf('Country') !== -1)
+        drillUpEvent &&
+          drillUpEvent({
+            from: 'region',
+            to: 'country',
+          });
     });
     this.regionLayer.fillLayer.on(drillDownTriggerEvent as string, (e: any) => {
-      this.drillDown(e.feature.properties.adcode);
-      drillDownEvent && drillDownEvent(e.feature.properties);
+      this.drillState = 'Province';
+      if (this.options.autoUpdateData) {
+        this.drillDown(e.feature.properties.adcode);
+      }
+      // 是否下钻
+      if (this.drillList.indexOf('Province') !== -1) {
+        this.regionLayer.hide();
+        drillDownEvent &&
+          drillDownEvent(
+            e.feature.properties,
+            'Province',
+            e.feature.properties.adcode,
+          );
+      }
     });
   }
   // 省份视角下钻
@@ -125,20 +133,39 @@ export default class DrillDownLayer {
       drillUpEvent,
       drillDownEvent,
     } = this.options;
+
     this.cityLayer.fillLayer.on(drillUpTriggerEvent as string, () => {
-      const properties = this.getProperties(
-        this.provinceLayer.getFillData(),
-        this.cityLayer.getOptions().adcode,
-      );
-      this.drillUp();
-      drillUpEvent && drillUpEvent(properties);
+      // const properties = this.getProperties(
+      //   this.provinceLayer.getFillData(),
+      //   this.cityLayer.getOptions().adcode,
+      // );
+      this.drillState = 'Province';
+      const next = this.options.regionDrill ? 'Region' : 'Country';
+      this.drillUp(next as DRILL_LEVEL);
+      if (this.drillList.indexOf(next) !== -1)
+        drillUpEvent &&
+          drillUpEvent({
+            to: next,
+            from: 'Province',
+          });
     });
+
     this.cityLayer.fillLayer.on(drillDownTriggerEvent as string, (e: any) => {
-      this.drillDown(e.feature.properties.adcode);
-      drillDownEvent && drillDownEvent(e.feature.properties);
+      this.drillState = 'City';
+      if (this.options.autoUpdateData) {
+        this.drillDown(e.feature.properties.adcode);
+      }
+      if (this.drillList.indexOf('City') !== -1) {
+        drillDownEvent &&
+          drillDownEvent(
+            e.feature.properties,
+            'City',
+            e.feature.properties.adcode,
+          );
+      }
     });
   }
-
+  // 添加县级行政区划
   public addCityEvent() {
     const {
       drillDownTriggerEvent,
@@ -146,12 +173,17 @@ export default class DrillDownLayer {
       drillUpEvent,
     } = this.options;
     this.countyLayer.fillLayer.on(drillUpTriggerEvent as string, () => {
-      const properties = this.getProperties(
-        this.cityLayer.getFillData(),
-        this.countyLayer.getOptions().adcode,
-      );
-      this.drillUp();
-      drillUpEvent && drillUpEvent(properties);
+      // const properties = this.getProperties(
+      //   this.cityLayer.getFillData(),
+      //   this.countyLayer.getOptions().adcode,
+      // );
+      this.drillUp('Province');
+      if (this.drillList.indexOf('Province') !== -1)
+        drillUpEvent &&
+          drillUpEvent({
+            to: 'Province',
+            from: 'city',
+          });
     });
   }
 
@@ -173,14 +205,15 @@ export default class DrillDownLayer {
     joinByField?: [string, string],
   ) {
     this.cityLayer.show();
+
     this.cityLayer.updateDistrict(adcode, newData, joinByField);
     this.cityLayer.fillLayer.fitBounds();
     if (this.options.regionDrill) {
       this.regionLayer.hide();
     } else {
-      this.countyLayer.hide();
+      this.provinceLayer.hide();
     }
-    this.drillState = 1;
+    this.drillState = 'Province';
   }
   // 城市视图 区县粒度
   public showCityView(
@@ -198,7 +231,7 @@ export default class DrillDownLayer {
     this.countyLayer.updateDistrict(adcode, newData, joinByField);
     this.countyLayer.fillLayer.fitBounds();
     this.cityLayer.hide();
-    this.drillState = 2;
+    this.drillState = 'City';
   }
 
   // 大区视图 省份视角
@@ -210,38 +243,37 @@ export default class DrillDownLayer {
     this.regionLayer.show();
     this.regionLayer.updateDistrict(adcode, newData, joinByField);
     this.regionLayer.fillLayer.fitBounds();
-    this.countyLayer.hide();
-    this.drillState = 0;
+
+    this.provinceLayer.hide();
+    this.drillState = 'Region';
   }
 
   /**
    * 向上
    */
-  public drillUp() {
-    switch (this.drillState) {
-      case 2:
+  public drillUp(type: DRILL_LEVEL) {
+    if (this.drillList.indexOf(type) === -1) {
+      return;
+    }
+    switch (type) {
+      case 'Province':
         this.cityLayer.show();
         this.cityLayer.fillLayer.fitBounds();
         this.countyLayer.hide();
-        this.drillState = 1;
+        this.drillState = 'Province';
         break;
-      case 0.5:
+      case 'Country':
         this.provinceLayer.show();
         this.provinceLayer.fillLayer.fitBounds();
-        this.cityLayer.hide();
-        this.drillState = 0;
+        this.regionLayer.hide();
+        this.drillState = 'Country';
         break;
-      case 1:
+      case 'Region':
         if (this.options.regionDrill) {
           this.regionLayer.show();
           this.regionLayer.fillLayer.fitBounds();
           this.cityLayer.hide();
-          this.drillState = 0.5;
-        } else {
-          this.provinceLayer.show();
-          this.provinceLayer.fillLayer.fitBounds();
-          this.cityLayer.hide();
-          this.drillState = 0;
+          this.drillState = 'Region';
         }
         break;
     }
@@ -251,42 +283,53 @@ export default class DrillDownLayer {
     newData?: Array<{ [key: string]: any }>,
     joinByField?: [string, string],
   ) {
-    const { drillDepth } = this.options;
-    if (this.drillState === drillDepth) {
+    if (this.drillList.indexOf(this.drillState) === -1) {
       return;
     }
     switch (this.drillState) {
-      case 0:
-        this.showProvinceView(adcode, newData, joinByField);
+      case 'Province':
+        this.showProvinceView(adcode, newData, joinByField); // 市
         break;
-      case 0.5:
-        this.showRegionView(adcode, newData, joinByField);
+      case 'Region':
+        this.showRegionView(adcode, newData, joinByField); // 省
         break;
-      case 1:
-        this.showCityView(adcode, newData, joinByField);
+      case 'City':
+        this.showCityView(adcode, newData, joinByField); // 区县
         break;
     }
   }
 
   public updateData(
-    layer: 'province' | 'city' | 'county',
+    layer: DRILL_LEVEL,
     newData: Array<{ [key: string]: any }>,
     joinByField?: [string, string],
   ) {
     switch (layer) {
-      case 'province':
+      case 'Country':
         this.provinceLayer.updateData(newData, joinByField);
         break;
-      case 'city':
+      case 'Region':
+        this.regionLayer.updateData(newData, joinByField);
+        break;
+      case 'Province':
         this.cityLayer.updateData(newData, joinByField);
         break;
-      case 'county':
+      case 'City':
         this.countyLayer.updateData(newData, joinByField);
     }
   }
 
-  private getLayerOption(type: 'province' | 'city' | 'county' | 'region') {
-    const { joinBy, label, bubble, fill, popup, geoDataLevel } = this.options;
+  private getLayerOption(type: DRILL_LEVEL) {
+    const {
+      joinBy,
+      label,
+      bubble,
+      fill,
+      popup,
+      geoDataLevel,
+      onClick,
+    } = this.options;
+
     const datatype = (type + 'Data') as
       | 'provinceData'
       | 'cityData'
@@ -299,9 +342,71 @@ export default class DrillDownLayer {
       bubble,
       fill,
       popup,
+      onClick,
       geoDataLevel,
-      ...this.options[type],
+      ...this.options[type.toLowerCase() as string],
     };
+  }
+
+  private initLayers(scene: Scene) {
+    const viewList = this.drillList;
+    viewList.indexOf('Country') !== -1 &&
+      (this.provinceLayer = new CountryLayer(scene, {
+        ...this.getLayerOption('Province'),
+      }));
+    viewList.indexOf('Region') !== -1 &&
+      (this.regionLayer = new RegionLayer(
+        scene,
+        this.getLayerOption('Region'),
+      ));
+
+    viewList.indexOf('Province') !== -1 &&
+      (this.cityLayer = new ProvinceLayer(scene, this.getLayerOption('City')));
+
+    viewList.indexOf('City') !== -1 &&
+      (this.countyLayer = new CityLayer(scene, this.getLayerOption('County')));
+  }
+
+  private initLayerEvent() {
+    const viewList = this.drillList;
+    if (!this.options.customTrigger) {
+      viewList.indexOf('Country') !== -1 &&
+        this.provinceLayer.on('loaded', () => {
+          // 支持大区 或者省份下钻
+          this.addCountryEvent();
+          if (this.options.viewStart !== 'Country') this.provinceLayer.hide();
+          this.layers.push(this.provinceLayer);
+        });
+      viewList.indexOf('Region') !== -1 &&
+        this.regionLayer.on('loaded', () => {
+          // 支持大区 或者省份下钻
+
+          this.addRegionEvent();
+          if (this.options.viewStart !== 'Region') this.regionLayer.hide();
+          this.layers.push(this.regionLayer);
+        });
+      viewList.indexOf('Province') !== -1 &&
+        this.cityLayer.on('loaded', () => {
+          this.addProvinceEvent();
+          if (this.options.viewStart !== 'Province') this.cityLayer.hide();
+          this.layers.push(this.cityLayer);
+        });
+      viewList.indexOf('City') !== -1 &&
+        this.countyLayer.on('loaded', () => {
+          this.addCityEvent();
+          if (this.options.viewStart !== 'City') this.countyLayer.hide();
+          this.layers.push(this.countyLayer);
+        });
+    }
+  }
+  private getViewList(): Array<DRILL_LEVEL> {
+    const { viewStart, viewEnd } = this.options;
+    const start = DRILL_TYPE_LIST.indexOf(viewStart as string);
+    const end = DRILL_TYPE_LIST.indexOf(viewEnd as string);
+    if (start === -1 || end === -1 || end < start) {
+      throw new Error('下钻 viewStart, viewEnd 参数错误');
+    }
+    return DRILL_TYPE_LIST.slice(start, end + 1) as DRILL_LEVEL[];
   }
 
   private getProperties(data: any, adcode: adcodeType) {

@@ -3,6 +3,7 @@ import {
   ScaleTypeName,
   StyleAttributeField,
   StyleAttributeOption,
+  TYPES,
 } from '@antv/l7';
 export type anchorType =
   | 'right'
@@ -128,6 +129,7 @@ export interface IDistrictLayerOption {
   chinaNationalStroke: string;
   chinaNationalWidth: number;
   popup: Partial<IPopupOptions>;
+  onClick?: (properties: any, type: string) => void;
 }
 interface IDrawOption {
   depth: 0 | 1 | 2 | 3;
@@ -137,7 +139,11 @@ interface IDrawOption {
   fill: Partial<IFillOptions>;
 }
 export interface IDrillDownOption {
-  drillDepth: 0 | 1 | 2;
+  viewStart: DRILL_LEVEL;
+  viewEnd: DRILL_LEVEL;
+  drillDepth: 0 | 0.5 | 1 | 2;
+  drillStart: 0 | 0.5 | 1 | 2;
+  autoUpdateData: boolean;
   regionDrill: boolean;
   geoDataLevel: 1 | 2;
   customTrigger: boolean;
@@ -156,6 +162,14 @@ export interface IDrillDownOption {
   region: Partial<IDrawOption>;
   city: Partial<IDrawOption>;
   county: Partial<IDrawOption>;
+  [key: string]: any;
+  onClick?: (properties: any, type: string) => void;
   drillUpEvent: (properties: any) => void;
-  drillDownEvent: (properties: any) => void;
+  drillDownEvent: (
+    properties: any,
+    type: string,
+    adcode: string | string[],
+  ) => void;
 }
+
+export type DRILL_LEVEL = 'Country' | 'Region' | 'Province' | 'City' | 'County';
