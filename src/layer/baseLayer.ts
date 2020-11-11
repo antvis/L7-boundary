@@ -21,6 +21,7 @@ import Pbf from 'pbf';
 import simplify from 'simplify-geojson';
 import { setDataLevel } from '../config';
 import { AttributeType, IDistrictLayerOption } from './interface';
+const eventList = ['loaded'];
 
 function mergeCustomizer(objValue: any, srcValue: any) {
   if (Array.isArray(srcValue)) {
@@ -38,7 +39,7 @@ export default class BaseLayer extends EventEmitter {
   protected fillData: any;
   protected layerType: string;
   private popup: IPopup;
-
+  private loaded: boolean = false;
   constructor(scene: Scene, option: Partial<IDistrictLayerOption> = {}) {
     super();
     this.scene = scene;
@@ -68,6 +69,49 @@ export default class BaseLayer extends EventEmitter {
 
   public getOptions() {
     return this.options;
+  }
+
+  public getLayer(type: 'fill' | 'line' | 'label' | 'bubble') {
+    // @ts-ignore
+    return this[type + 'Layer'];
+  }
+
+  // @ts-ignore
+  public on(
+    event: string,
+    handle: (...args: any[]) => void,
+    layerType: 'fill' | 'line' | 'label' | 'bubble' = 'fill',
+  ): void {
+    if (eventList.indexOf(event) !== -1) {
+      super.on(event, handle);
+    } else {
+      if (this.loaded && this.getLayer(layerType)) {
+        this.getLayer(layerType).on(event, handle);
+      } else {
+        super.once('loaded', () => {
+          this.getLayer(layerType).on(event, handle);
+        });
+      }
+    }
+  }
+
+  // @ts-ignore
+  public off(
+    event: string,
+    handle: (...args: any[]) => void,
+    layerType: 'fill' | 'line' | 'label' | 'bubble' = 'fill',
+  ): void {
+    if (eventList.indexOf(event) !== -1) {
+      super.on(event, handle);
+    } else if (this.getLayer(layerType)) {
+      if (this.loaded && this.getLayer(layerType)) {
+        this.getLayer(layerType).off(event, handle);
+      } else {
+        super.once('loaded', () => {
+          this.getLayer(layerType).off(event, handle);
+        });
+      }
+    }
   }
 
   public updateData(
@@ -237,6 +281,15 @@ export default class BaseLayer extends EventEmitter {
     }
 
     this.emit('loaded');
+    this.loaded = true;
+  }
+  public updateLayerAttribute(
+    layerName: 'fill' | 'line' | 'label' | 'bubble' = 'fill',
+    type: 'color' | 'size' | 'shape' | 'filter',
+    attr: AttributeType | undefined,
+  ) {
+    const layer = this.getLayer(layerName);
+    this.setLayerAttribute(layer, type, attr);
   }
 
   protected addFillLine(provinceLine: any) {
