@@ -179,7 +179,7 @@ export default () => {
     ];
 
     const scene = new Scene({
-      id: 'china2',
+      id: 'china3',
       map: new Mapbox({
         center: [116.2825, 39.9],
         pitch: 0,
@@ -194,6 +194,7 @@ export default () => {
       new CountryLayer(scene, {
         data: ProvinceData,
         joinBy: ['NAME_CHN', 'name'],
+        visible: true,
         fill: {
           color: {
             field: 'NAME_CHN',
@@ -220,6 +221,38 @@ export default () => {
           },
         },
       });
+
+      new CountryLayer(scene, {
+        data: ProvinceData,
+        joinBy: ['NAME_CHN', 'name'],
+        fill: {
+          color: {
+            field: 'NAME_CHN',
+            values: [
+              '#feedde',
+              '#fdd0a2',
+              '#fdae6b',
+              '#fd8d3c',
+              '#e6550d',
+              '#a63603',
+            ],
+          },
+        },
+        visible: false,
+        depth: 3,
+        stroke: '#ccc',
+        label: {
+          enable: true,
+          textAllowOverlap: false,
+          field: 'name',
+        },
+        popup: {
+          enable: true,
+          Html: props => {
+            return `<span>${props.NAME_CHN}</span>`;
+          },
+        },
+      });
     });
   }, []);
 
@@ -229,7 +262,7 @@ export default () => {
         height: '400px',
         position: 'relative',
       }}
-      id="china2"
+      id="china3"
     ></div>
   );
 };

@@ -203,7 +203,7 @@ export default () => {
     });
 
     scene.on('loaded', () => {
-      new CountryLayer(scene, {
+      const layer = new CountryLayer(scene, {
         data: ProvinceData,
         joinBy: ['NAME_CHN', 'name'],
         depth: 1,
@@ -229,6 +229,15 @@ export default () => {
             return `<span>${props.NAME_CHN}</span>`;
           },
         },
+      });
+      layer.on('click', e => {
+        layer.updateLayerAttribute('fill', 'color', 'red');
+      });
+      layer.on('dblclick', e => {
+        layer.updateLayerAttribute('fill', 'color', 'blue');
+      });
+      layer.on('undblclick', e => {
+        layer.updateLayerAttribute('fill', 'color', 'green');
       });
     });
   }, []);

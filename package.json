@@ -1,13 +1,13 @@
 {
   "name": "@antv/l7-district",
-  "version": "2.2.41",
+  "version": "2.2.42",
   "scripts": {
     "start": "dumi dev",
     "docs:build": "dumi build",
     "docs:deploy": "gh-pages -d docs-dist",
     "build": "father-build",
     "deploy": "npm run docs:build && npm run docs:deploy",
-    "release": "npm run build && npm publish --tag beta",
+    "release": "npm run build && npm publish",
     "prettier": "prettier --write \"**/*.{js,jsx,tsx,ts,less,md,json}\"",
     "test": "umi-test",
     "test:coverage": "umi-test --coverage"
@@ -34,7 +34,7 @@
     ]
   },
   "dependencies": {
-    "@antv/l7": "^2.2.37",
+    "@antv/l7": "^2.2.41",
     "@antv/l7-maps": "^2.2.37",
     "@babel/runtime": "^7.7.7",
     "@turf/circle": "^6.0.1",
@@ -51,10 +51,9 @@
     "simplify-geojson": "^1.0.3"
   },
   "peerDependencies": {
-    "@antv/l7": "^2.2.34"
+    "@antv/l7": "^2.2.37"
   },
   "devDependencies": {
-    "@antv/l7": "^2.2.34",
     "@rollup/plugin-commonjs": "11.0.2",
     "@umijs/preset-react": "1.x",
     "@umijs/test": "^3.0.5",
