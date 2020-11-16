@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-district",
-  "version": "2.2.43",
+  "version": "2.2.44",
   "scripts": {
     "start": "dumi dev",
     "docs:build": "dumi build",
