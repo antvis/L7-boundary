@@ -134,6 +134,8 @@ export default class ProvinceLayer extends BaseLayer {
     if (showBorder) {
       this.addFillLine(data);
     }
+    this.emit('loaded');
+    this.loaded = true;
   }
 
   private async addProvinceLineLayer() {

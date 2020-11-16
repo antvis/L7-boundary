@@ -26,7 +26,6 @@ export default () => {
             value: 17881.12,
           },
         ],
-        drillDepth: 2,
         fill: {
           color: {
             field: 'NAME_CHN',

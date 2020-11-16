@@ -69,6 +69,7 @@ export default class DrillDownLayer {
       (e: any) => {
         let adcode = e.feature.properties.adcode;
         let type: DRILL_LEVEL = 'Province';
+        this.drillState = 'Province';
         if (this.options.regionDrill) {
           const REGION_CODE = e.feature.properties.REGION_CODE as string;
           adcode = RegionList[REGION_CODE].child; // 下钻到省级
@@ -255,6 +256,7 @@ export default class DrillDownLayer {
     if (this.drillList.indexOf(type) === -1) {
       return;
     }
+    console.log(type);
     switch (type) {
       case 'Province':
         this.cityLayer.show();
@@ -265,7 +267,11 @@ export default class DrillDownLayer {
       case 'Country':
         this.provinceLayer.show();
         this.provinceLayer.fillLayer.fitBounds();
-        this.regionLayer.hide();
+        if (this.options.regionDrill) {
+          this.regionLayer.hide();
+        } else {
+          this.cityLayer.hide();
+        }
         this.drillState = 'Country';
         break;
       case 'Region':
@@ -402,12 +408,16 @@ export default class DrillDownLayer {
   }
   private getViewList(): Array<DRILL_LEVEL> {
     const { viewStart, viewEnd } = this.options;
-    const start = DRILL_TYPE_LIST.indexOf(viewStart as string);
-    const end = DRILL_TYPE_LIST.indexOf(viewEnd as string);
+    let drillList = DRILL_TYPE_LIST;
+    if (!this.options.regionDrill && drillList.indexOf('Region') !== -1) {
+      drillList.splice(1, 1);
+    }
+    const start = drillList.indexOf(viewStart as string);
+    const end = drillList.indexOf(viewEnd as string);
     if (start === -1 || end === -1 || end < start) {
       throw new Error('下钻 viewStart, viewEnd 参数错误');
     }
-    return DRILL_TYPE_LIST.slice(start, end + 1) as DRILL_LEVEL[];
+    return drillList.slice(start, end + 1) as DRILL_LEVEL[];
   }
 
   private getProperties(data: any, adcode: adcodeType) {

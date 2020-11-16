@@ -33,13 +33,13 @@ export default class BaseLayer extends EventEmitter {
   public lineLayer: ILayer;
   public labelLayer: ILayer;
   public bubbleLayer: ILayer;
+  public loaded: boolean = false;
   protected scene: Scene;
   protected options: IDistrictLayerOption;
   protected layers: ILayer[] = [];
   protected fillData: any;
   protected layerType: string;
   private popup: IPopup;
-  private loaded: boolean = false;
   constructor(scene: Scene, option: Partial<IDistrictLayerOption> = {}) {
     super();
     this.scene = scene;
@@ -279,9 +279,6 @@ export default class BaseLayer extends EventEmitter {
     if (popup.enable) {
       this.addPopup();
     }
-
-    this.emit('loaded');
-    this.loaded = true;
   }
   public updateLayerAttribute(
     layerName: 'fill' | 'line' | 'label' | 'bubble' = 'fill',

@@ -230,6 +230,9 @@ export default () => {
           },
         },
       });
+      layer.on('loaded', () => {
+        console.log('加载完成');
+      });
       layer.on('click', e => {
         layer.updateLayerAttribute('fill', 'color', 'red');
       });
