@@ -9,21 +9,26 @@ export default class CountryLayer extends BaseLayer {
   private fillRawData: any;
   constructor(scene: Scene, option: Partial<IDistrictLayerOption> = {}) {
     super(scene, option);
+    this.init();
+  }
+  protected async init() {
     const { depth, showBorder } = this.options;
-    this.addProvinceFill();
-    this.addProvinceLabel();
+    await this.addProvinceFill();
+    await this.addProvinceLabel();
     const countryConfig = getDataConfig(this.options.geoDataLevel).country.CHN[
       depth
     ];
     if (showBorder) {
-      this.addProvinceLine(countryConfig.provinceLine);
+      await this.addProvinceLine(countryConfig.provinceLine);
       if (depth === 2 * 1) {
-        this.addCityBorder(countryConfig.fill);
+        await this.addCityBorder(countryConfig.fill);
       }
       if (depth === 3 * 1) {
-        this.addCountyBorder(countryConfig.fill);
+        await this.addCountyBorder(countryConfig.fill);
       }
     }
+    this.emit('loaded');
+    this.loaded = true;
   }
   protected async addProvinceFill() {
     const { depth, adcode } = this.options;

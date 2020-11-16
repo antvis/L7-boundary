@@ -20,7 +20,6 @@ export default () => {
 
     scene.on('loaded', () => {
       const drillLayer = new DrillDownLayer(scene, {
-        regionDrill: true,
         viewStart: 'Country',
         viewEnd: 'County',
         provinceData: [
@@ -33,7 +32,6 @@ export default () => {
           { areaCode: '103', govTrans_avgTrdCnt30d: 1748562 },
           { areaCode: '104', govTrans_avgTrdCnt30d: 6425560 },
         ],
-
         provinceStroke: '#333',
         drillDownTriggerEvent: 'dblclick',
         fill: {
@@ -42,25 +40,10 @@ export default () => {
             values: ['#eff3ff', '#bdd7e7', '#6baed6', '#3182bd', '#08519c'],
           },
         },
-
-        province: {
-          adcode: ['100', '101'],
-          joinBy: ['REGION_CODE', 'areaCode'],
-          regionType: 'region',
-          provinceStroke: 'rgba(255,255,255,0.1)',
-        },
-        region: {
-          adcode: ['410000'],
-          joinBy: ['adcode', 'areaCode'],
-          strokeOpacity: 0.5,
-          depth: 1,
-          fill: {
-            color: {
-              field: 'NAME_CHN',
-              values: ['#eff3ff', '#bdd7e7', '#6baed6', '#3182bd', '#08519c'],
-            },
-          },
-        },
+        // province: {
+        //   joinBy: ['REGION_CODE', 'areaCode'],
+        //   provinceStroke: 'rgba(255,255,255,0.1)',
+        // },
         county: {
           strokeOpacity: 0.5,
           fill: {
@@ -96,7 +79,6 @@ export default () => {
           },
         },
       });
-      console.log(drillLayer);
     });
   }, []);
 
