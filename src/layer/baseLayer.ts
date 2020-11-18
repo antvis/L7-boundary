@@ -76,12 +76,12 @@ export default class BaseLayer extends EventEmitter {
     return this[type + 'Layer'];
   }
 
-  // @ts-ignore
+  public on(event: any, fn: any, context?: any): this;
   public on(
     event: string,
     handle: (...args: any[]) => void,
     layerType: 'fill' | 'line' | 'label' | 'bubble' = 'fill',
-  ): void {
+  ): this {
     if (eventList.indexOf(event) !== -1) {
       super.on(event, handle);
     } else {
@@ -93,14 +93,15 @@ export default class BaseLayer extends EventEmitter {
         });
       }
     }
+    return this;
   }
 
-  // @ts-ignore
+  public off(event: any, fn: any, context?: any): this;
   public off(
     event: string,
     handle: (...args: any[]) => void,
     layerType: 'fill' | 'line' | 'label' | 'bubble' = 'fill',
-  ): void {
+  ): this {
     if (eventList.indexOf(event) !== -1) {
       super.on(event, handle);
     } else if (this.getLayer(layerType)) {
@@ -112,6 +113,7 @@ export default class BaseLayer extends EventEmitter {
         });
       }
     }
+    return this;
   }
 
   public updateData(

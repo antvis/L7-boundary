@@ -53,7 +53,7 @@ export default class DrillDownLayer {
       },
       region: {
         adcode: [],
-        depth: 0,
+        depth: 1,
       },
       county: {
         adcode: [],
@@ -256,7 +256,6 @@ export default class DrillDownLayer {
     if (this.drillList.indexOf(type) === -1) {
       return;
     }
-    console.log(type);
     switch (type) {
       case 'Province':
         this.cityLayer.show();
@@ -355,7 +354,7 @@ export default class DrillDownLayer {
   }
 
   private initLayers(scene: Scene) {
-    const viewList = this.drillList;
+    const viewList = this.getViewList();
 
     viewList.indexOf('Country') !== -1 &&
       (this.provinceLayer = new CountryLayer(scene, {
@@ -375,7 +374,7 @@ export default class DrillDownLayer {
   }
 
   private initLayerEvent() {
-    const viewList = this.drillList;
+    const viewList = this.getViewList();
     if (!this.options.customTrigger) {
       viewList.indexOf('Country') !== -1 &&
         this.provinceLayer.on('loaded', () => {
