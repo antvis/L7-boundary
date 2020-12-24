@@ -355,7 +355,6 @@ export default class DrillDownLayer {
 
   private initLayers(scene: Scene) {
     const viewList = this.getViewList();
-
     viewList.indexOf('Country') !== -1 &&
       (this.provinceLayer = new CountryLayer(scene, {
         ...this.getLayerOption('Province'),

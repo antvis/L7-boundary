@@ -99,7 +99,9 @@ export type adcodeType = string[] | string | number | number[];
 export interface IDistrictLayerOption {
   zIndex: number;
   visible: boolean;
+  enablePropagation: boolean;
   geoDataLevel: 1 | 2;
+
   data?: Array<{ [key: string]: any }>;
   joinBy: [string, string];
   adcode: adcodeType;

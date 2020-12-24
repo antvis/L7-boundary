@@ -155,6 +155,7 @@ export default class BaseLayer extends EventEmitter {
     return {
       zIndex: 0,
       visible: true,
+      enablePropagation: true,
       geoDataLevel: 2,
       regionType: 'province',
       depth: 1,
@@ -225,11 +226,20 @@ export default class BaseLayer extends EventEmitter {
 
   protected addFillLayer(fillCountry: any) {
     // 添加省份填充
-    const { popup, data = [], fill, autoFit, joinBy, visible } = this.options;
+    const {
+      popup,
+      data = [],
+      fill,
+      autoFit,
+      joinBy,
+      visible,
+      enablePropagation,
+    } = this.options;
     this.fillData = fillCountry;
     const fillLayer = new PolygonLayer({
       autoFit,
       visible,
+      enablePropagation,
     }).source(fillCountry, {
       transforms:
         data.length === 0

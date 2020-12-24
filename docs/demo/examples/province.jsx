@@ -18,20 +18,13 @@ export default () => {
     });
 
     scene.on('loaded', () => {
-      new ProvinceLayer(scene, {
+      const layer1 = new ProvinceLayer(scene, {
+        enablePropagation: false,
         adcode: ['330000'], //选择对应省的行政编码，只可展示一个省份
         depth: 2, //普通省份如果需要展示下面市的边界depth为2， 对应直辖市需要将depth设为3
         fill: {
           color: {
-            field: 'NAME_CHN',
-            values: [
-              '#feedde',
-              '#fdd0a2',
-              '#fdae6b',
-              '#fd8d3c',
-              '#e6550d',
-              '#a63603',
-            ],
+            values: 'red',
           },
         },
         stroke: '#ccc',
@@ -46,6 +39,34 @@ export default () => {
             return `<span>${props.NAME_CHN}</span>`;
           },
         },
+      });
+      layer1.on('click', e => {
+        console.log('1', e);
+      });
+      const layer2 = new ProvinceLayer(scene, {
+        enablePropagation: true,
+        adcode: ['330000'], //选择对应省的行政编码，只可展示一个省份
+        depth: 2, //普通省份如果需要展示下面市的边界depth为2， 对应直辖市需要将depth设为3
+        fill: {
+          color: {
+            values: 'blue',
+          },
+        },
+        stroke: '#ccc',
+        label: {
+          enable: true,
+          textAllowOverlap: false,
+          field: 'NAME_CHN',
+        },
+        popup: {
+          enable: true,
+          Html: props => {
+            return `<span>${props.NAME_CHN}</span>`;
+          },
+        },
+      });
+      layer2.on('click', e => {
+        console.log('2', e);
       });
     });
   }, []);
