@@ -18,7 +18,9 @@ export default () => {
     });
 
     scene.on('loaded', () => {
-      new DrillDownLayer(scene, {
+      const layer = new DrillDownLayer(scene, {
+        viewStart: 'Province',
+        viewEnd: 'County',
         data: [
           {
             NAME_CHN: '云南省',
@@ -40,6 +42,7 @@ export default () => {
           },
         },
         city: {
+          adcode: [530000],
           fill: {
             color: {
               field: 'NAME_CHN',
@@ -60,6 +63,7 @@ export default () => {
           },
         },
       });
+      console.log(layer);
     });
   }, []);
 
