@@ -34,8 +34,6 @@
     ]
   },
   "dependencies": {
-    "@antv/l7": "^2.2.41",
-    "@antv/l7-maps": "^2.2.37",
     "@babel/runtime": "^7.7.7",
     "@turf/circle": "^6.0.1",
     "@turf/distance": "^6.0.1",
@@ -51,9 +49,12 @@
     "simplify-geojson": "^1.0.3"
   },
   "peerDependencies": {
-    "@antv/l7": "^2.2.37"
+    "@antv/l7": "^2.3.0",
+    "@antv/l7-maps":  "^2.3.0"
   },
   "devDependencies": {
+    "@antv/l7":  "^2.3.0",
+    "@antv/l7-maps":  "^2.3.0",
     "@rollup/plugin-commonjs": "11.0.2",
     "@umijs/preset-react": "1.x",
     "@umijs/test": "^3.0.5",

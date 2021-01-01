@@ -234,12 +234,14 @@ export default class BaseLayer extends EventEmitter {
       joinBy,
       visible,
       enablePropagation,
+      zIndex,
     } = this.options;
     this.fillData = fillCountry;
     const fillLayer = new PolygonLayer({
       autoFit,
       visible,
       enablePropagation,
+      zIndex,
     }).source(fillCountry, {
       transforms:
         data.length === 0
