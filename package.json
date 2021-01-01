@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-district",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "scripts": {
     "start": "dumi dev",
     "docs:build": "dumi build",
@@ -50,11 +50,11 @@
   },
   "peerDependencies": {
     "@antv/l7": "^2.3.0",
-    "@antv/l7-maps":  "^2.3.0"
+    "@antv/l7-maps": "^2.3.0"
   },
   "devDependencies": {
-    "@antv/l7":  "^2.3.0",
-    "@antv/l7-maps":  "^2.3.0",
+    "@antv/l7": "^2.3.0",
+    "@antv/l7-maps": "^2.3.0",
     "@rollup/plugin-commonjs": "11.0.2",
     "@umijs/preset-react": "1.x",
     "@umijs/test": "^3.0.5",
