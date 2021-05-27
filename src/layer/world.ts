@@ -20,6 +20,8 @@ export default class WorldLayer extends BaseLayer {
       if (this.options.label?.enable) {
         this.addLabelLayer(fillLabel, 'json');
       }
+      this.emit('loaded');
+      this.loaded = true;
     });
   }
 

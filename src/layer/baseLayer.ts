@@ -144,7 +144,7 @@ export default class BaseLayer extends EventEmitter {
       const buffer = await (await fetch(data.url)).arrayBuffer();
       let geojson = geobuf.decode(new Pbf(buffer));
       if (this.options.simplifyTolerance !== false) {
-        geojson = simplify(geojson, this.options.simplifyTolerance);
+        geojson = simplify(geojson, this.options.simplifyTolerance || 0.8);
       }
       return geojson;
     } else {
