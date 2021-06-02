@@ -18,7 +18,7 @@ export default () => {
     });
 
     scene.on('loaded', () => {
-      new WorldLayer(scene, {
+      const layer = new WorldLayer(scene, {
         data: [],
         fill: {
           color: {
@@ -45,6 +45,10 @@ export default () => {
             return `<span>${props.NAME_CHN}</span>`;
           },
         },
+      });
+      console.log(layer.getLayer('fill'));
+      layer.on('click', e => {
+        alert(e);
       });
     });
   }, []);

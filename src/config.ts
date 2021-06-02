@@ -125,17 +125,21 @@ const dataLevel2: { [key: string]: any } = {
 };
 const dataLevel1: { [key: string]: any } = {
   world: {
+    // 世界地图数据
     fill: {
+      // 世界地图填充数据
       type: 'pbf',
       url:
         'https://gw.alipayobjects.com/os/bmw-prod/35bb8365-1926-471c-b357-db2c02ff3a81.bin',
     },
     line: {
+      // 世界地图边界数据
       type: 'pbf',
       url:
         'https://gw.alipayobjects.com/os/bmw-prod/8ec671c3-a4f9-4fdf-8e88-85d2ab1d8930.bin',
     },
     label: {
+      // 世界地图标注数据
       type: 'pbf',
       url:
         'https://gw.alipayobjects.com/os/bmw-prod/90c51eb3-04d7-402f-bd05-95e4bd27dd62.bin',
@@ -144,14 +148,18 @@ const dataLevel1: { [key: string]: any } = {
       },
     },
     nationalBoundaries: {
+      // 世界地图
       type: 'json',
       url:
         'https://gw.alipayobjects.com/os/bmw-prod/ee493a41-0558-4c0e-bee6-520276c4f1a8.json',
     },
   },
   country: {
+    // 国家地图
     CHN: {
+      // 中国地图
       1: {
+        // 省级地图
         fill: {
           type: 'pbf',
           url:
@@ -174,6 +182,7 @@ const dataLevel1: { [key: string]: any } = {
         },
       },
       2: {
+        // 市级地图
         fill: {
           type: 'pbf',
           url:
@@ -196,12 +205,15 @@ const dataLevel1: { [key: string]: any } = {
         },
       },
       3: {
+        // 县级地图
         fill: {
+          // 填充
           type: 'pbf',
           url:
             'https://gw.alipayobjects.com/os/bmw-prod/24a9ee83-2be1-4fc1-b187-769ac939269d.bin',
         },
         line: {
+          // 边界
           type: 'pbf',
           url:
             'https://gw.alipayobjects.com/os/bmw-prod/bc97875a-90f2-42c0-a62c-43d2efd7460d.bin',
