@@ -206,7 +206,6 @@ export default class DrillDownLayer {
     joinByField?: [string, string],
   ) {
     this.cityLayer.show();
-
     this.cityLayer.updateDistrict(adcode, newData, joinByField);
     this.cityLayer.fillLayer.fitBounds();
     if (this.options.regionDrill) {

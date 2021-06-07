@@ -138,6 +138,27 @@ export default class BaseLayer extends EventEmitter {
               },
             ],
     });
+    if (this.options.bubble && this.options.bubble?.enable !== false) {
+      const bubbleData = this.fillData.features.map((feature: any) => {
+        return {
+          ...feature.properties,
+          center: [feature.properties.x, feature.properties.y],
+        };
+      });
+      this.bubbleLayer.setData(bubbleData, {
+        transforms:
+          data.length === 0
+            ? []
+            : [
+                {
+                  type: 'join',
+                  sourceField: joinBy[1], // data1 对应字段名
+                  targetField: joinBy[0], // data 对应字段名 绑定到的地理数据
+                  data,
+                },
+              ],
+      });
+    }
   }
   protected async fetchData(data: { url: any; type: string }) {
     if (data.type === 'pbf') {
@@ -335,6 +356,7 @@ export default class BaseLayer extends EventEmitter {
 
   protected addBubbleLayer(labelData: any, type: string = 'json') {
     const { bubble, zIndex, data = [], joinBy, visible } = this.options;
+    console.log(bubble);
     const bubbleLayer = new PointLayer({
       zIndex: zIndex + 0.3,
       visible,
@@ -377,6 +399,7 @@ export default class BaseLayer extends EventEmitter {
 
   protected addLabel(labelData: any, type: string = 'json') {
     const { label, zIndex, visible } = this.options;
+    console.log(labelData);
     const labelLayer = new PointLayer({
       zIndex: zIndex + 5,
       visible,
