@@ -17,7 +17,7 @@ export default () => {
       }),
     });
     scene.on('loaded', () => {
-      new DrillDownLayer(scene, {
+      const layer = new DrillDownLayer(scene, {
         autoFit: false,
         data: [],
         autoUpdateData: false,
@@ -36,6 +36,17 @@ export default () => {
           size: { field: 'value', values: [3, 20] },
         },
         drillUpTriggerEvent: 'none',
+        drillDownEvent: (properties, type, adcode) => {
+          layer.drillDown(
+            adcode,
+            [
+              { name: '成都市', value: 122 },
+              { name: '乐山市', value: 422 },
+              { name: '内江市', value: 222 },
+            ],
+            ['NAME_CHN', 'name'],
+          );
+        },
         province: {
           data: [
             { name: '上海市', value: 4161 },

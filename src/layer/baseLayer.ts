@@ -139,12 +139,20 @@ export default class BaseLayer extends EventEmitter {
             ],
     });
     if (this.options.bubble && this.options.bubble?.enable !== false) {
-      const bubbleData = this.fillData.features.map((feature: any) => {
-        return {
-          ...feature.properties,
-          center: [feature.properties.x, feature.properties.y],
-        };
+      // TODO 临时处理如果数据为join
+      const dataMap: { [key: string]: any } = {};
+      data.forEach(item => {
+        dataMap[item[joinBy[1]]] = item;
       });
+      const bubbleData = this.fillData.features
+        .map((feature: any) => {
+          return {
+            ...feature.properties,
+            center: [feature.properties.x, feature.properties.y],
+          };
+        })
+        .filter((feature: any) => dataMap[feature[joinBy[0]]]);
+
       this.bubbleLayer.setData(bubbleData, {
         transforms:
           data.length === 0
