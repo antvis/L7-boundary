@@ -1,11 +1,4 @@
-import {
-  ILayer,
-  LineLayer,
-  PointLayer,
-  PolygonLayer,
-  Scene,
-  StyleAttrField,
-} from '@antv/l7';
+import { Scene } from '@antv/l7';
 // tslint:disable-next-line: no-submodule-imports
 import merge from 'lodash/merge';
 import { getDataConfig } from '../config';
@@ -23,7 +16,6 @@ export default class ProvinceLayer extends BaseLayer {
   constructor(scene: Scene, option: Partial<IProvinceLayerOption> = {}) {
     super(scene, option);
     this.addProvinceFillLayer();
-    // this.addProvinceLineLayer();
   }
   // 通过adcode 更新
   public updateDistrict(
@@ -40,15 +32,7 @@ export default class ProvinceLayer extends BaseLayer {
     const fillData = this.filterData(this.fillRawData, adcode);
     const lineData = this.filterData(this.lineRawData, adcode);
     const labelData = this.filterLabelData(this.labelRawData, adcode);
-    if (this.options.bubble && this.options.bubble?.enable !== false) {
-      const bubbleData = fillData.features.map((feature: any) => {
-        return {
-          ...feature.properties,
-          center: [feature.properties.x, feature.properties.y],
-        };
-      });
-      this.bubbleLayer.setData(bubbleData);
-    }
+
     this.fillData = fillData;
     this.updateData(newData, joinByField);
     if (showBorder) {
@@ -136,16 +120,5 @@ export default class ProvinceLayer extends BaseLayer {
     }
     this.emit('loaded');
     this.loaded = true;
-  }
-
-  private async addProvinceLineLayer() {
-    const { depth, adcode } = this.options as IProvinceLayerOption;
-    const countryConfig = getDataConfig(this.options.geoDataLevel).country.CHN[
-      depth
-    ];
-    const fillData = await this.fetchData(countryConfig.line);
-    const data = this.filterData(fillData, adcode);
-    this.lineRawData = fillData;
-    this.addFillLine(data);
   }
 }
