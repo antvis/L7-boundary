@@ -24,7 +24,7 @@ export default () => {
         type: 'DrillDownLayer',
         joinBy: ['NAME_CHN', 'name'],
         viewStart: 'Country',
-        viewEnd: 'Province',
+        viewEnd: 'City',
         provinceStroke: '#ccc',
         cityStroke: '#EBCCB4',
         cityStrokeWidth: 1,

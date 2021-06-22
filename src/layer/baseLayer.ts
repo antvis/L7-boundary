@@ -184,6 +184,7 @@ export default class BaseLayer extends EventEmitter {
     return {
       zIndex: 0,
       visible: true,
+      viewType: 'normal',
       enablePropagation: true,
       geoDataLevel: 2,
       regionType: 'province',
@@ -364,7 +365,6 @@ export default class BaseLayer extends EventEmitter {
 
   protected addBubbleLayer(labelData: any, type: string = 'json') {
     const { bubble, zIndex, data = [], joinBy, visible } = this.options;
-    console.log(bubble);
     const bubbleLayer = new PointLayer({
       zIndex: zIndex + 0.3,
       visible,
@@ -407,7 +407,6 @@ export default class BaseLayer extends EventEmitter {
 
   protected addLabel(labelData: any, type: string = 'json') {
     const { label, zIndex, visible } = this.options;
-    console.log(labelData);
     const labelLayer = new PointLayer({
       zIndex: zIndex + 5,
       visible,

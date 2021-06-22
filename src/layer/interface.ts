@@ -101,7 +101,7 @@ export interface IDistrictLayerOption {
   visible: boolean;
   enablePropagation: boolean;
   geoDataLevel: 1 | 2;
-
+  viewType: 'normal' | 'standard';
   data?: Array<{ [key: string]: any }>;
   joinBy: [string, string];
   adcode: adcodeType;
