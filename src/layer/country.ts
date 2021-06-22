@@ -54,17 +54,23 @@ export default class CountryLayer extends BaseLayer {
       ? await this.fetchData(countryConfig.label)
       : null;
     if (fillLabel && this.options.label?.enable) {
-      this.addLabelLayer(
-        fillLabel.filter((v: any) => {
-          return v.name !== '澳门';
-        }),
-      );
-      this.addMCLabel();
+      const viewType = this.getOptions().viewType;
+      if (viewType === 'standard') {
+        this.addLabelLayer(
+          fillLabel.filter((v: any) => {
+            return v.name !== '澳门';
+          }),
+        );
+        this.addMCLabel();
+      } else {
+        this.addLabelLayer(fillLabel);
+      }
     }
   }
   // 国界,省界 完整国界
   protected async addProvinceLine(cfg: any) {
     const lineData = await this.fetchData(cfg);
+    // 普通国界
     const border1 = lineData.features.filter((feature: any) => {
       const type = feature.properties.type;
       return type === '1';
@@ -98,17 +104,6 @@ export default class CountryLayer extends BaseLayer {
   // 普通边界
   protected async addNormalProvinceLine(cfg: any) {}
 
-  private async loadData() {
-    const { depth } = this.options;
-    const countryConfig = getDataConfig(this.options.geoDataLevel).country.CHN[
-      depth
-    ];
-    const fillData = await this.fetchData(countryConfig.fill);
-    const fillLabel = countryConfig.label
-      ? await this.fetchData(countryConfig.label)
-      : null;
-    return [fillData, fillLabel];
-  }
   // 省级行政区划
   private async addNationBorder(
     boundaries: any,

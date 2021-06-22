@@ -223,7 +223,7 @@ export default class DrillDownLayer {
   ) {
     this.countyLayer.show();
     let adcode: string | string[] = `${code}`;
-    if (adcode.substr(2, 2) === '00') {
+    if (adcode.substr(0, 4) === '5000') {
       // 重庆包含两个编码
       adcode = [adcode.substr(0, 2) + '0100', adcode.substr(0, 2) + '0200'];
     }
