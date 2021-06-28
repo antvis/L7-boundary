@@ -226,6 +226,12 @@ export default class DrillDownLayer {
     if (adcode.substr(0, 4) === '5000') {
       // 重庆包含两个编码
       adcode = [adcode.substr(0, 2) + '0100', adcode.substr(0, 2) + '0200'];
+    } else if (
+      adcode.substr(2, 2) === '00' &&
+      adcode !== '810000' &&
+      adcode !== '820000'
+    ) {
+      adcode = [adcode.substr(0, 2) + '0100'];
     }
     // 更新县级行政区划
     this.countyLayer.updateDistrict(adcode, newData, joinByField);
