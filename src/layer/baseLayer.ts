@@ -290,7 +290,8 @@ export default class BaseLayer extends EventEmitter {
     if (fill.scale && isObject(fill.color)) {
       fillLayer.scale('color', {
         type: fill.scale,
-        field: fill.color.field as string,
+        //@ts-ignore
+        field: fill?.color?.field as string,
       });
     }
     fillLayer.shape('fill').style(fill.style);
