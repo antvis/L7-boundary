@@ -6,26 +6,24 @@ Install dependencies,
 
 ```bash
 $ yarn install
-$ npm i
 ```
 
 Start the dev server,
 
 ```bash
 $ yarn run start
-$ npm start
 ```
 
 Build documentation,
 
 ```bash
-$ npm run docs:build
+$ yarn run docs:build
 ```
 
 Build library via `father-build`,
 
 ```bash
-$ npm run build
+$ yarn run build
 ```
 
 ### 如何更新数据
