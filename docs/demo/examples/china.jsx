@@ -221,6 +221,10 @@ export default () => {
           },
         },
       });
+
+      setTimeout(() => {
+        layer.disablePopup();
+      }, 10000);
     });
   }, []);
 
