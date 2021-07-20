@@ -321,9 +321,8 @@ export default class BaseLayer extends EventEmitter {
       });
       this.addBubbleLayer(labeldata);
     }
-    if (popup.enable) {
-      this.addPopup();
-    }
+
+    this.addPopup(); // 默认添加Popup 事件在
   }
   public updateLayerAttribute(
     layerName: 'fill' | 'line' | 'label' | 'bubble' = 'fill',
@@ -332,6 +331,23 @@ export default class BaseLayer extends EventEmitter {
   ) {
     const layer = this.getLayer(layerName);
     this.setLayerAttribute(layer, type, attr);
+  }
+
+  public enablePopup() {
+    this.setOption({
+      popup: {
+        ...this.options.popup,
+        enable: true,
+      },
+    });
+  }
+  public disablePopup() {
+    this.setOption({
+      popup: {
+        ...this.options.popup,
+        enable: false,
+      },
+    });
   }
 
   protected addFillLine(provinceLine: any) {
@@ -438,6 +454,10 @@ export default class BaseLayer extends EventEmitter {
         : this.fillLayer;
     }
     popupLayer.on(popup.openTriggerEvent as string, e => {
+      // 增加关闭 popup
+      if (!popup.enable) {
+        return;
+      }
       const html = popup.Html
         ? popup.Html(e.feature.properties ? e.feature.properties : e.feature)
         : '';

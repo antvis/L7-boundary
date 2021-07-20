@@ -434,4 +434,32 @@ export default class DrillDownLayer {
     });
     return feature[0] ? feature[0].properties : {};
   }
+  public enablePopup() {
+    if (this.cityLayer) {
+      this.cityLayer.enablePopup();
+    }
+    if (this.countyLayer) {
+      this.countyLayer.enablePopup();
+    }
+    if (this.provinceLayer) {
+      this.provinceLayer.enablePopup();
+    }
+    if (this.regionLayer) {
+      this.regionLayer.enablePopup();
+    }
+  }
+  public disablePopup() {
+    if (this.cityLayer) {
+      this.cityLayer.disablePopup();
+    }
+    if (this.countyLayer) {
+      this.countyLayer.disablePopup();
+    }
+    if (this.provinceLayer) {
+      this.provinceLayer.disablePopup();
+    }
+    if (this.regionLayer) {
+      this.regionLayer.disablePopup();
+    }
+  }
 }

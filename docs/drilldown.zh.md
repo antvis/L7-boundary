@@ -130,6 +130,14 @@ DrillDownLayer 提供默认提供通过 Layer 的交互事件，实现上钻下�
   drillLayer.drillDown(['110100'])
 ```
 
+#### enablePopup
+
+开启 Popup
+
+#### disblePopup
+
+关闭 Popup
+
 ### drillUp
 
 向上钻取
