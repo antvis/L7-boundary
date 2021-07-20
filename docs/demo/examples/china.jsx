@@ -191,7 +191,7 @@ export default () => {
     });
 
     scene.on('loaded', () => {
-      new CountryLayer(scene, {
+      const layer = new CountryLayer(scene, {
         data: ProvinceData,
         joinBy: ['NAME_CHN', 'name'],
         visible: true,
@@ -208,38 +208,6 @@ export default () => {
             ],
           },
         },
-        stroke: '#ccc',
-        label: {
-          enable: true,
-          textAllowOverlap: false,
-          field: 'name',
-        },
-        popup: {
-          enable: true,
-          Html: props => {
-            return `<span>${props.NAME_CHN}</span>`;
-          },
-        },
-      });
-
-      new CountryLayer(scene, {
-        data: ProvinceData,
-        joinBy: ['NAME_CHN', 'name'],
-        fill: {
-          color: {
-            field: 'NAME_CHN',
-            values: [
-              '#feedde',
-              '#fdd0a2',
-              '#fdae6b',
-              '#fd8d3c',
-              '#e6550d',
-              '#a63603',
-            ],
-          },
-        },
-        visible: false,
-        depth: 3,
         stroke: '#ccc',
         label: {
           enable: true,
