@@ -124,7 +124,7 @@ District 提供 polygon 数据需要跟用户的属性数据，通过关系字�
 
 开启 Popup
 
-#### disblePopup
+#### disablePopup
 
 关闭 Popup
 

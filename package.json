@@ -12,7 +12,7 @@
     "test": "umi-test",
     "test:coverage": "umi-test --coverage"
   },
-  "files": [
+  "files": [ 
     "dist",
     "lib",
     "es",
