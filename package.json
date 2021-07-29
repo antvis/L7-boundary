@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-district",
-  "version": "2.3.10",
+  "version": "2.3.11",
   "scripts": {
     "start": "dumi dev",
     "docs:build": "dumi build",
@@ -12,7 +12,7 @@
     "test": "umi-test",
     "test:coverage": "umi-test --coverage"
   },
-  "files": [ 
+  "files": [
     "dist",
     "lib",
     "es",
