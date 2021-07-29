@@ -316,15 +316,19 @@ export default class DrillDownLayer {
   ) {
     switch (layer) {
       case 'Country':
+      case 'province':
         this.provinceLayer.updateData(newData, joinByField);
         break;
       case 'Region':
+      case 'region':
         this.regionLayer.updateData(newData, joinByField);
         break;
       case 'Province':
+      case 'city':
         this.cityLayer.updateData(newData, joinByField);
         break;
       case 'City':
+      case 'county':
         this.countyLayer.updateData(newData, joinByField);
     }
   }
@@ -340,7 +344,7 @@ export default class DrillDownLayer {
       onClick,
     } = this.options;
 
-    const datatype = (type + 'Data') as
+    const datatype = (type.toLowerCase() + 'Data') as
       | 'provinceData'
       | 'cityData'
       | 'countyData'
