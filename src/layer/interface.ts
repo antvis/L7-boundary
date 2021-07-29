@@ -174,4 +174,13 @@ export interface IDrillDownOption {
   ) => void;
 }
 
-export type DRILL_LEVEL = 'Country' | 'Region' | 'Province' | 'City' | 'County';
+export type DRILL_LEVEL =
+  | 'Country'
+  | 'Region'
+  | 'Province'
+  | 'City'
+  | 'County'
+  | 'province'
+  | 'city'
+  | 'county'
+  | 'region';
