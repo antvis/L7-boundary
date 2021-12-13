@@ -31,6 +31,7 @@ const dataLevel2: { [key: string]: any } = {
   country: {
     CHN: {
       1: {
+        // 省份
         fill: {
           // 中国地图省份围栏数据
           type: 'pbf',
@@ -54,6 +55,7 @@ const dataLevel2: { [key: string]: any } = {
         },
       },
       2: {
+        // 城市
         fill: {
           type: 'pbf',
           url:
@@ -76,16 +78,17 @@ const dataLevel2: { [key: string]: any } = {
         },
       },
       3: {
+        // 区县
         fill: {
           type: 'pbf',
           url:
-            'https://gw.alipayobjects.com/os/bmw-prod/516b2703-d692-44e6-80dd-b3f5df0186e7.bin',
+            'https://gw.alipayobjects.com/os/bmw-prod/524f7de2-7d69-4fa7-8da3-7ff42fa69ee4.bin',
         },
-        line: {
-          type: 'pbf',
-          url:
-            'https://gw.alipayobjects.com/os/bmw-prod/bc97875a-90f2-42c0-a62c-43d2efd7460d.bin',
-        },
+        // line: {
+        //   type: 'pbf',
+        //   url:
+        //     'https://gw.alipayobjects.com/os/bmw-prod/bc97875a-90f2-42c0-a62c-43d2efd7460d.bin',
+        // },
         countryLine: {
           type: 'pbf',
           url:
@@ -119,10 +122,9 @@ const dataLevel2: { [key: string]: any } = {
       },
     },
   },
-  province: {
-    110000: '',
-  },
 };
+
+// 高精度数据
 const dataLevel1: { [key: string]: any } = {
   world: {
     // 世界地图数据
