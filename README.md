@@ -34,6 +34,7 @@ setDataConfig({
   country: {
     CHN: {
       1: {
+        // 2. 市级地图 3.县级地图
         // 设置省级地图
         fill: {
           type: 'pbf', // 支持pbf 和 geojson  pbf 进行了数据压缩，减少数据量
