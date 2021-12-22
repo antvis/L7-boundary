@@ -135,6 +135,7 @@ export interface IDistrictLayerOption {
 }
 interface IDrawOption {
   depth: 0 | 1 | 2 | 3;
+  adcode: adcodeType;
   joinBy: [string, string];
   label: Partial<ILabelOption>;
   bubble: Partial<IBubbleOption>;
