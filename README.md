@@ -1,4 +1,6 @@
-# boundary
+# LL7Boundary
+
+L7Boundary 停止维护，建议替换使用 L7Plot Choropleth，[详见](https://github.com/antvis/L7-boundary)
 
 ## Getting Started
 
